@@ -15,7 +15,7 @@ import { UsuarioEntidad } from '../entidad/usuario.entidad';
   providers: [
     {
       provide: ServicioRegistrarUsuario,
-      inject: [RepositorioUsuario],
+      inject: [RepositorioUsuario, DaoUsuario],
       useFactory: servicioRegistrarUsuarioProveedor,
     },
     repositorioUsuarioProvider,

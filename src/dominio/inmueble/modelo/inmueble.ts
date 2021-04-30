@@ -1,6 +1,4 @@
 import { ErrorValorMinimo } from 'src/dominio/errores/error-valor-minimo';
-import { Usuario } from 'src/dominio/usuario/modelo/usuario';
-import { UsuarioEntidad } from 'src/infraestructura/usuario/entidad/usuario.entidad';
 
 export const VALOR_MINIMO_INMUEBLE = 150000
 
@@ -9,13 +7,13 @@ export class Inmueble {
     readonly #direccion: string
     readonly #valor: number
     readonly #fechaAsignacion: Date
-    readonly #usuario: UsuarioEntidad
-    constructor(direccion: string, valor: number, id?: number, fechaAsignacion?: Date, usuario?: UsuarioEntidad) {
+    readonly #usuarioId: number
+    constructor(direccion: string, valor: number, id?: number, fechaAsignacion?: Date, usuarioId?: number) {
         this.validarValor(valor)
         this.#direccion = direccion
         this.#valor = valor
         if (fechaAsignacion) this.#fechaAsignacion = fechaAsignacion
-        if (usuario) this.#usuario = usuario
+        if (usuarioId) this.#usuarioId = usuarioId
         if (id) this.#id = id
     }
 
@@ -34,8 +32,8 @@ export class Inmueble {
     public get fechaAsignacion(): Date {
         return this.#fechaAsignacion
     }
-    public get usuario(): UsuarioEntidad {
-        return this.#usuario
+    public get usuarioId(): number {
+        return this.#usuarioId
     }
     public get id(): number {
         return this.#id

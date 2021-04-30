@@ -19,5 +19,5 @@ export class PagoDto {
     hasta: Date;
 
     @ApiProperty()
-    usuario: UsuarioEntidad
+    usuarioId: number
 }

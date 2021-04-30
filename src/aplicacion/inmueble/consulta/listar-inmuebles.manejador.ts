@@ -4,13 +4,13 @@ import { InmuebleDto } from './dto/inmueble.dto';
 
 @Injectable()
 export class ManejadorListarInmuebles {
-  constructor(private _daoInmueble: DaoInmueble) {}
+  constructor(private _daoInmueble: DaoInmueble) { }
 
   async ejecutarListar(): Promise<InmuebleDto[]> {
     return this._daoInmueble.listar();
   }
 
   async ejecutarObtenerPorId(id: number): Promise<InmuebleDto> {
-    return this._daoInmueble.obtenerPorId(id);
+    return this._daoInmueble.obtenerInmueblePorId(id);
   }
 }

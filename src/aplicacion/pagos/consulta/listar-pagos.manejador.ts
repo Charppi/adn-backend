@@ -11,6 +11,6 @@ export class ManejadorListarPagos {
     }
 
     async ejecutarObtenerPorId(id: number): Promise<PagoDto> {
-        return this._daoPago.obtenerPorId(id);
+        return this._daoPago.obtenerPagoPorId(id);
     }
 }

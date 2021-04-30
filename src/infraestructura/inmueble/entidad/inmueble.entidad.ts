@@ -22,6 +22,9 @@ export class InmuebleEntidad {
   @Column({ nullable: true })
   fechaLimitePago: Date;
 
+  @Column({ nullable: true })
+  usuarioId: number
+
   @ManyToOne(() => UsuarioEntidad, usuario => usuario.inmuebles, { nullable: true })
   usuario: UsuarioEntidad
 

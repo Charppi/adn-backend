@@ -7,6 +7,10 @@ export class ManejadorRegistrarPago {
     constructor(private _servicioRegistrarPago: ServicioRegistrarPago) { }
 
     async ejecutar(comandoRegistrarPago: ComandoRegistrarPago) {
-        return await this._servicioRegistrarPago.ejecutar(comandoRegistrarPago);
+        return await this._servicioRegistrarPago.ejecutar(
+            comandoRegistrarPago.idInmueble,
+            comandoRegistrarPago.idPagador,
+            comandoRegistrarPago.valor
+        );
     }
 }

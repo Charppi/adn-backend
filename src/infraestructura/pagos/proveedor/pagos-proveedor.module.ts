@@ -11,13 +11,14 @@ import { ManejadorListarPagos } from 'src/aplicacion/pagos/consulta/listar-pagos
 import { DaoPago } from 'src/dominio/pagos/puerto/dao/dao-pago';
 import { InmuebleProveedorModule } from 'src/infraestructura/inmueble/proveedor/inmueble-proveedor.module';
 import { RepositorioInmueble } from 'src/dominio/inmueble/puerto/repositorio/respositorio-inmueble';
+import { DaoInmueble } from 'src/dominio/inmueble/puerto/dao/dao-inmueble';
 
 @Module({
     imports: [TypeOrmModule.forFeature([PagoEntidad]), InmuebleProveedorModule],
     providers: [
         {
             provide: ServicioRegistrarPago,
-            inject: [RepositorioPago, RepositorioInmueble],
+            inject: [RepositorioPago, RepositorioInmueble, DaoInmueble, DaoPago],
             useFactory: servicioRegistrarPagoProveedor,
         },
         repositorioPagoProvider,

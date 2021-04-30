@@ -14,13 +14,16 @@ import { ManejadorListarInmuebles } from 'src/aplicacion/inmueble/consulta/lista
 import { InmuebleDto } from 'src/aplicacion/inmueble/consulta/dto/inmueble.dto';
 import { ManejadorEditarInmueble } from 'src/aplicacion/inmueble/comando/editar-inmueble.manejador';
 import { ComandoEditarInmueble } from 'src/aplicacion/inmueble/comando/editar-inmueble.comando';
+import { ComandoAsignarInmueble } from 'src/aplicacion/inmueble/comando/asignar-inmueble.comando';
+import { ManejadorAsignarInmueble } from 'src/aplicacion/inmueble/comando/asignar-inmueble.manejador';
 
 @Controller('inmuebles')
 export class InmuebleControlador {
   constructor(
     private readonly _manejadorRegistrarInmueble: ManejadorRegistrarInmueble,
     private readonly _manejadorListarInmueble: ManejadorListarInmuebles,
-    private readonly _manejadorEditarInmueble: ManejadorEditarInmueble
+    private readonly _manejadorEditarInmueble: ManejadorEditarInmueble,
+    private readonly _manejadorAsignarInmueble: ManejadorAsignarInmueble,
   ) { }
 
   @Post()
@@ -34,6 +37,13 @@ export class InmuebleControlador {
   async editar(@Body() comandoEditarInmueble: ComandoEditarInmueble) {
     await this._manejadorEditarInmueble.ejecutar(comandoEditarInmueble)
   }
+
+  @Put("/asignar")
+  @UsePipes(new ValidationPipe({ transform: true }))
+  async asignar(@Body() comandoAsignarInmueble: ComandoAsignarInmueble) {
+    await this._manejadorAsignarInmueble.ejecutar(comandoAsignarInmueble)
+  }
+
 
   @Get()
   async listar(): Promise<InmuebleDto[]> {

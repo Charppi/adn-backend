@@ -1,10 +1,10 @@
 import { DaoInmueble } from 'src/dominio/inmueble/puerto/dao/dao-inmueble';
 import { RepositorioInmueble } from 'src/dominio/inmueble/puerto/repositorio/respositorio-inmueble';
-import { ServicioEditarInmueble } from 'src/dominio/inmueble/servicio/servicio-editar-inmueble';
+import { ServicioAsignarInmueble } from 'src/dominio/inmueble/servicio/servicio-asignar-inmueble';
 
-export function servicioEditarInmuebleProveedor(
+export function servicioAsignarInmuebleProveedor(
     repositorioInmueble: RepositorioInmueble,
     daoInmueble: DaoInmueble,
 ) {
-    return new ServicioEditarInmueble(repositorioInmueble, daoInmueble);
+    return new ServicioAsignarInmueble(repositorioInmueble, daoInmueble);
 }

@@ -1,6 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { UsuarioDto } from 'src/aplicacion/usuario/consulta/dto/usuario.dto';
 
 export class InmuebleDto {
+
+  @ApiProperty()
+  id?: number
+
   @ApiProperty({ example: 'Calle #1 2-3' })
   direccion: string;
 
@@ -12,4 +17,11 @@ export class InmuebleDto {
 
   @ApiProperty({ required: false })
   fechaLimitePago?: Date;
+
+  @ApiProperty({ required: false })
+  fechaInicioPago?: Date;
+
+  @ApiProperty()
+  usuario?: UsuarioDto
+
 }

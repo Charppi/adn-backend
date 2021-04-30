@@ -7,17 +7,13 @@ import { ComandoEditarInmueble } from "../comando/editar-inmueble.comando";
 export class ManejadorEditarInmueble {
     constructor(
         private _servicioEditarInmueble: ServicioEditarInmueble,
-
     ) { }
 
     async ejecutar(comandoRegistrarInmueble: ComandoEditarInmueble) {
-        const usuario = comandoRegistrarInmueble.idUsuarioAsignado ? await this._servicioEditarInmueble.obtenerUsuario(comandoRegistrarInmueble.idUsuarioAsignado) : null
         await this._servicioEditarInmueble.ejecutar(new Inmueble(
             comandoRegistrarInmueble.direccion,
             comandoRegistrarInmueble.valor,
-            comandoRegistrarInmueble.id,
-            comandoRegistrarInmueble.fechaAsignacion,
-            usuario
+            comandoRegistrarInmueble.id
         ));
     }
 }

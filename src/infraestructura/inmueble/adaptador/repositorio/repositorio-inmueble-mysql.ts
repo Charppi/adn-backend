@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import moment from 'moment';
 import { Inmueble } from 'src/dominio/inmueble/modelo/inmueble';
 import { RepositorioInmueble } from 'src/dominio/inmueble/puerto/repositorio/respositorio-inmueble';
 import { Repository } from 'typeorm';
 import { InmuebleEntidad } from '../../entidad/inmueble.entidad';
-import moment from "moment"
 
 @Injectable()
 export class RepositorioInmuebleMysql implements RepositorioInmueble {
@@ -12,37 +12,42 @@ export class RepositorioInmuebleMysql implements RepositorioInmueble {
     @InjectRepository(InmuebleEntidad)
     private readonly repositorio: Repository<InmuebleEntidad>,
   ) { }
-  async obtenerInmueblePorId(id: number): Promise<InmuebleEntidad> {
-    return await this.repositorio.findOne(id, { relations: ["usuario"] })
+  async actualizarFechasDePago(id: number, fechaInicioPago: Date, fechaLimitePago: Date): Promise<void> {
+    await this.repositorio.createQueryBuilder()
+      .update()
+      .set({ fechaInicioPago, fechaLimitePago })
+      .where("id = :id", { id })
+      .execute()
   }
 
-  async existeDireccionInmueble(direccion: string): Promise<boolean> {
-    return (await this.repositorio.count({ direccion })) > 0;
-  }
   async guardar(inmueble: Inmueble): Promise<void> {
     const entidad = new InmuebleEntidad();
     entidad.direccion = inmueble.direccion;
     entidad.valor = inmueble.valor;
     await this.repositorio.save(entidad);
   }
-  async editar(inmueble: Inmueble) {
-    const entidad = new InmuebleEntidad();
-    entidad.direccion = inmueble.direccion
-    entidad.valor = inmueble.valor
-    entidad.fechaAsignacion = inmueble.fechaAsignacion
-    entidad.fechaInicioPago = inmueble.fechaAsignacion
-    entidad.fechaLimitePago = moment(inmueble.fechaAsignacion).add(1, "month").toDate()
-    entidad.usuario = inmueble.usuario
-    entidad.id = inmueble.id
-    await this.repositorio.save(entidad)
+  async editar({ direccion, valor, id }: Inmueble) {
+    await this.repositorio.createQueryBuilder()
+      .update()
+      .set({ direccion, valor })
+      .where("id = :id", { id })
+      .execute()
+  }
+
+  async asignarInmueble(id: number, usuarioId: number) {
+    const fechaAsignacion = new Date()
+    const fechaInicioPago = fechaAsignacion
+    const fechaLimitePago = moment(fechaInicioPago).add(1, "month").toDate()
+    await this.repositorio.createQueryBuilder()
+      .update()
+      .set({ usuarioId, fechaAsignacion, fechaInicioPago, fechaLimitePago })
+      .where({ id })
+      .execute()
   }
 
   async actualizarDatosDePago(inmueble: InmuebleEntidad) {
     await this.repositorio.save(inmueble)
   }
 
-  async existeInmueble(id: number): Promise<boolean> {
-    return (await this.repositorio.count({ id })) > 0;
-  }
 
 }

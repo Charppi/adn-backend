@@ -5,12 +5,14 @@ export class Usuario {
   readonly #nombre: string;
   readonly #apellido: string;
   readonly #cedula: number;
+  readonly #id?: number;
 
-  constructor(nombre: string, apellido: string, cedula: number) {
+  constructor(nombre: string, apellido: string, cedula: number, id?: number) {
     this.validarTamanoCedula(cedula)
     this.#nombre = nombre;
     this.#apellido = apellido;
     this.#cedula = cedula
+    if (id) this.#id = id
   }
 
   validarTamanoCedula(cedula: number) {
@@ -19,6 +21,10 @@ export class Usuario {
 
   get nombre(): string {
     return this.#nombre;
+  }
+
+  get id(): number {
+    return this.#id;
   }
 
   get apellido(): string {

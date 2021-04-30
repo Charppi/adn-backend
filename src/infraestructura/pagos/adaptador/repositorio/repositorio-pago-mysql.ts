@@ -4,22 +4,24 @@ import { Repository } from 'typeorm';
 import { RepositorioPago } from 'src/dominio/pagos/puerto/repositorio/repositorio-pago';
 import { PagoEntidad } from '../../entidad/pago.entidad';
 import { Pago } from 'src/dominio/pagos/modelo/pago';
-import { UsuarioEntidad } from 'src/infraestructura/usuario/entidad/usuario.entidad';
-import { InmuebleEntidad } from 'src/infraestructura/inmueble/entidad/inmueble.entidad';
+import { DaoInmueble } from 'src/dominio/inmueble/puerto/dao/dao-inmueble';
 
 @Injectable()
 export class RepositorioPagoMysql implements RepositorioPago {
     constructor(
         @InjectRepository(PagoEntidad)
         private readonly repositorio: Repository<PagoEntidad>,
+        private readonly _daoInmueble: DaoInmueble,
     ) { }
-    async obtenerPagosAnteriores(desde: Date, hasta: Date, usuario: UsuarioEntidad, inmueble: InmuebleEntidad): Promise<PagoEntidad[]> {
-        return await this.repositorio.find({ where: { desde, hasta, usuario, inmueble }, order: { fechaPago: "DESC" } })
-    }
-    async obtenerPagoPorId(id: number): Promise<PagoEntidad> {
-        return await this.repositorio.findOne(id)
-    }
-    async guardar(pago: PagoEntidad): Promise<void> {
-        await this.repositorio.save(pago)
+
+    async guardar({ cargo, desde, hasta, valor, inmuebleId }: Pago): Promise<void> {
+        const inmueble = await this._daoInmueble.obtenerInmueblePorId(inmuebleId)
+        const usuario = inmueble.usuario
+        const fechaPago = new Date()
+        this.repositorio.createQueryBuilder()
+            .insert()
+            .values({ cargo, desde, hasta, valor, inmueble, usuario, fechaPago })
+            .execute()
+
     }
 }
