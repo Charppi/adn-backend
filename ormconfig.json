@@ -1,0 +1,16 @@
+{
+    "type": "mariadb",
+    "host": "localhost",
+    "port": 3306,
+    "username": "adn",
+    "password": "qpd3n0ui*9AzTLfy",
+    "database": "adn",
+    "synchronize": true,
+    "logging": false,
+    "entities": [
+        "dist/**/*.entidad{.ts,.js}"
+    ],
+    "migrations": [
+        "dist/infraestructura/migraciones/*.js"
+    ]
+}
