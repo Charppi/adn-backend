@@ -34,6 +34,7 @@ import { servicioRegistrarPagoProveedor } from 'src/infraestructura/pagos/provee
 import { ManejadorRegistrarPago } from 'src/aplicacion/pagos/comando/registrar-pago.manejador';
 import { ManejadorListarPagos } from 'src/aplicacion/pagos/consulta/listar-pagos.manejador';
 import { ComandoRegistrarPago } from 'src/aplicacion/pagos/comando/registrar-pago.comando';
+import { InmuebleProveedorModule } from 'src/infraestructura/inmueble/proveedor/inmueble-proveedor.module';
 
 /**
  * Un sandbox es util cuando el módulo de nest se configura una sola vez durante el ciclo completo de pruebas
@@ -43,6 +44,7 @@ const sinonSandbox = createSandbox();
 describe('Pruebas al controlador de pagos', () => {
     let app: INestApplication;
     let repositorioPago: SinonStubbedInstance<RepositorioPago>;
+    let repositorioInmueble: SinonStubbedInstance<RepositorioInmueble>;
     let daoPago: SinonStubbedInstance<DaoPago>;
 
     /**
@@ -56,6 +58,7 @@ describe('Pruebas al controlador de pagos', () => {
         daoPago = createStubObj<DaoPago>(['listar', 'obtenerFechaUltimoPago', 'obtenerPagoPorId', 'obtenerTotalAbonosAnteriores'], sinonSandbox);
         const moduleRef = await Test.createTestingModule({
             controllers: [PagoControlador],
+            imports: [InmuebleProveedorModule],
             providers: [
                 AppLogger,
                 {

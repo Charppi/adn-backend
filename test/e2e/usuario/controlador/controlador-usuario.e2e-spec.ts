@@ -32,7 +32,7 @@ describe('Pruebas al controlador de usuarios', () => {
       ['guardar'],
       sinonSandbox,
     );
-    daoUsuario = createStubObj<DaoUsuario>(['listar'], sinonSandbox);
+    daoUsuario = createStubObj<DaoUsuario>(["listar", "existeCedulaUsuario", "obtenerUsuarioId"], sinonSandbox);
     const moduleRef = await Test.createTestingModule({
       controllers: [UsuarioControlador],
       providers: [

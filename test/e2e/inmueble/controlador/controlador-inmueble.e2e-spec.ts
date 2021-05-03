@@ -20,6 +20,7 @@ import { ManejadorEditarInmueble } from 'src/aplicacion/inmueble/comando/editar-
 import { ManejadorRegistrarInmueble } from 'src/aplicacion/inmueble/comando/registrar-inmueble.manejador';
 import { ManejadorListarInmuebles } from 'src/aplicacion/inmueble/consulta/listar-inmuebles.manejador';
 import { ComandoRegistrarInmueble } from 'src/aplicacion/inmueble/comando/registrar-inmueble.comando';
+import { VALOR_MINIMO_INMUEBLE } from 'src/dominio/inmueble/modelo/inmueble';
 
 /**
  * Un sandbox es util cuando el módulo de nest se configura una sola vez durante el ciclo completo de pruebas
@@ -36,10 +37,10 @@ describe('Pruebas al controlador de inmueble', () => {
      **/
     beforeAll(async () => {
         repositorioInmueble = createStubObj<RepositorioInmueble>(
-            ['guardar'],
+            ["guardar", "asignarInmueble", "actualizarFechasDePago", "editar"],
             sinonSandbox,
         );
-        daoInmueble = createStubObj<DaoInmueble>(['listar'], sinonSandbox);
+        daoInmueble = createStubObj<DaoInmueble>(["listar", "existeDireccionInmueble", "existeInmueble", "obtenerInmueblePorId"], sinonSandbox);
         const moduleRef = await Test.createTestingModule({
             controllers: [InmuebleControlador],
             providers: [
@@ -118,12 +119,12 @@ describe('Pruebas al controlador de inmueble', () => {
         expect(response.body.statusCode).toBe(HttpStatus.BAD_REQUEST);
     });
 
-    it('debería fallar al registar un inmueble con un valor menor al límite (actualmente $150.000)', async () => {
+    it(`debería fallar al registar un inmueble con un valor menor al límite (actualmente $${VALOR_MINIMO_INMUEBLE})`, async () => {
         const inmueble: ComandoRegistrarInmueble = {
             direccion: "Calle 17 # 31 - 17",
             valor: 140000
         };
-        const mensaje = `El valor mínimo de un inmueble es de ${inmueble.valor}`;
+        const mensaje = `El valor mínimo de un inmueble es de ${VALOR_MINIMO_INMUEBLE}`;
         const response = await request(app.getHttpServer())
             .post('/inmuebles')
             .send(inmueble)

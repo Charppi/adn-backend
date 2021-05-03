@@ -1,9 +1,11 @@
 import { ServicioRegistrarInmueble } from 'src/dominio/inmueble/servicio/servicio-registrar-inmueble';
-import { Inmueble } from 'src/dominio/inmueble/modelo/inmueble';
+import { Inmueble, VALOR_MINIMO_INMUEBLE } from 'src/dominio/inmueble/modelo/inmueble';
 import { RepositorioInmueble } from 'src/dominio/inmueble/puerto/repositorio/respositorio-inmueble';
 import { SinonStubbedInstance } from 'sinon';
 import { createStubObj } from '../../../util/create-object.stub';
 import { DaoInmueble } from 'src/dominio/inmueble/puerto/dao/dao-inmueble';
+import { ErrorDeNegocio } from 'src/dominio/errores/error-de-negocio';
+import { ErrorValorMinimo } from 'src/dominio/errores/error-valor-minimo';
 
 describe('ServicioRegistrarInmueble', () => {
   let servicioRegistrarInmueble: ServicioRegistrarInmueble;
@@ -17,28 +19,34 @@ describe('ServicioRegistrarInmueble', () => {
       "guardar",
       'editar'
     ]);
+    daoInmueble = createStubObj<DaoInmueble>(["existeDireccionInmueble", "existeInmueble"])
     servicioRegistrarInmueble = new ServicioRegistrarInmueble(
       repositorioInmuebleStub, daoInmueble
     );
   });
 
-  // it('si la cedula de usuario ya existe no se puede crear y deberia retonar error', async () => {
-  //   repositorioInmuebleStub.existeDireccionInmueble.returns(Promise.resolve(true));
 
-  //   await expect(
-  //     servicioRegistrarInmueble.ejecutar(
-  //       new Inmueble('Rosa', 'Melano', 1006453353),
-  //     ),
-  //   ).rejects.toThrow('El documento 1006453353 ya está registrado');
-  // });
+  it(`Debería fallar si se envía un valor menor a ${VALOR_MINIMO_INMUEBLE}`, async () => {
+    await expect(
+      servicioRegistrarInmueble.ejecutar(
+        new Inmueble("Calle 123", VALOR_MINIMO_INMUEBLE - 1)
+      )
+    ).rejects.toStrictEqual(
+      new ErrorValorMinimo(`El valor mínimo de un inmueble es de ${VALOR_MINIMO_INMUEBLE}`),
+    )
 
-  // it('si la cedula no existe guarda el usuario el repositorio', async () => {
-  //   const usuario = new Inmueble('Jose', 'Meleguindo Alcueyo', 70353283);
-  //   repositorioInmuebleStub.existeInmueble.returns(Promise.resolve(false));
+  })
 
-  //   await servicioRegistrarInmueble.ejecutar(usuario);
+  it('Debería fallar si encuentra un inmueble con una dirección ya registrada', async () => {
+    daoInmueble.existeDireccionInmueble.returns(Promise.resolve(true));
 
-  //   expect(repositorioInmuebleStub.guardar.getCalls().length).toBe(1);
-  //   expect(repositorioInmuebleStub.guardar.calledWith(usuario)).toBeTruthy();
-  // });
+    const direccion = "Calle 123"
+
+    await expect(
+      servicioRegistrarInmueble.ejecutar(
+        new Inmueble(direccion, VALOR_MINIMO_INMUEBLE)
+      )
+    ).rejects.toThrow(`Ya existe un inmueble para la dirección ${direccion}`)
+
+  })
 });

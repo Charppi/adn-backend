@@ -4,6 +4,8 @@ import { RepositorioUsuario } from 'src/dominio/usuario/puerto/repositorio/repos
 import { SinonStubbedInstance } from 'sinon';
 import { createStubObj } from '../../../util/create-object.stub';
 import { DaoUsuario } from 'src/dominio/usuario/puerto/dao/dao-usuario';
+import { ErrorValorMinimo } from 'src/dominio/errores/error-valor-minimo';
+import { ErrorDeNegocio } from 'src/dominio/errores/error-de-negocio';
 
 describe('ServicioRegistrarUsuario', () => {
   let servicioRegistrarUsuario: ServicioRegistrarUsuario;
@@ -14,19 +16,23 @@ describe('ServicioRegistrarUsuario', () => {
     repositorioUsuarioStub = createStubObj<RepositorioUsuario>([
       'guardar'
     ]);
+    daoUsuario = createStubObj<DaoUsuario>(["existeCedulaUsuario", "obtenerUsuarioId"])
     servicioRegistrarUsuario = new ServicioRegistrarUsuario(
       repositorioUsuarioStub, daoUsuario
     );
   });
 
-  it('si la cedula de usuario ya existe no se puede crear y deberia retonar error', async () => {
+  it('si la cedula de usuario ya existe no se puede crear y deberia retornar error', async () => {
     daoUsuario.existeCedulaUsuario.returns(Promise.resolve(true));
 
     await expect(
       servicioRegistrarUsuario.ejecutar(
         new Usuario('Rosa', 'Melano', 1006453353),
       ),
-    ).rejects.toThrow('El documento 1006453353 ya está registrado');
+    ).rejects.toStrictEqual(
+      new ErrorDeNegocio('El documento 1006453353 ya está registrado'),
+    );
+
   });
 
   it('si la cedula no existe guarda el usuario el repositorio', async () => {
