@@ -5,7 +5,7 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class ManejadorRegistrarInmueble {
-  constructor(private _servicioRegistrarInmueble: ServicioRegistrarInmueble) {}
+  constructor(private _servicioRegistrarInmueble: ServicioRegistrarInmueble) { }
 
   async ejecutar(comandoRegistrarInmueble: ComandoRegistrarInmueble) {
     await this._servicioRegistrarInmueble.ejecutar(

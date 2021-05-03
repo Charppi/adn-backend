@@ -3,24 +3,24 @@ import { Usuario } from 'src/dominio/usuario/modelo/usuario';
 import { RepositorioUsuario } from 'src/dominio/usuario/puerto/repositorio/repositorio-usuario';
 import { SinonStubbedInstance } from 'sinon';
 import { createStubObj } from '../../../util/create-object.stub';
+import { DaoUsuario } from 'src/dominio/usuario/puerto/dao/dao-usuario';
 
 describe('ServicioRegistrarUsuario', () => {
   let servicioRegistrarUsuario: ServicioRegistrarUsuario;
   let repositorioUsuarioStub: SinonStubbedInstance<RepositorioUsuario>;
+  let daoUsuario: SinonStubbedInstance<DaoUsuario>;
 
   beforeEach(() => {
     repositorioUsuarioStub = createStubObj<RepositorioUsuario>([
-      'obtenerUsuarioId',
-      'guardar',
-      'existeCedulaUsuario'
+      'guardar'
     ]);
     servicioRegistrarUsuario = new ServicioRegistrarUsuario(
-      repositorioUsuarioStub,
+      repositorioUsuarioStub, daoUsuario
     );
   });
 
   it('si la cedula de usuario ya existe no se puede crear y deberia retonar error', async () => {
-    repositorioUsuarioStub.existeCedulaUsuario.returns(Promise.resolve(true));
+    daoUsuario.existeCedulaUsuario.returns(Promise.resolve(true));
 
     await expect(
       servicioRegistrarUsuario.ejecutar(
@@ -31,7 +31,7 @@ describe('ServicioRegistrarUsuario', () => {
 
   it('si la cedula no existe guarda el usuario el repositorio', async () => {
     const usuario = new Usuario('Jose', 'Meleguindo Alcueyo', 70353283);
-    repositorioUsuarioStub.existeCedulaUsuario.returns(Promise.resolve(false));
+    daoUsuario.existeCedulaUsuario.returns(Promise.resolve(false));
 
     await servicioRegistrarUsuario.ejecutar(usuario);
 

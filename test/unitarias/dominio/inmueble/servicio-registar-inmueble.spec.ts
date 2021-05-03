@@ -3,22 +3,22 @@ import { Inmueble } from 'src/dominio/inmueble/modelo/inmueble';
 import { RepositorioInmueble } from 'src/dominio/inmueble/puerto/repositorio/respositorio-inmueble';
 import { SinonStubbedInstance } from 'sinon';
 import { createStubObj } from '../../../util/create-object.stub';
+import { DaoInmueble } from 'src/dominio/inmueble/puerto/dao/dao-inmueble';
 
 describe('ServicioRegistrarInmueble', () => {
   let servicioRegistrarInmueble: ServicioRegistrarInmueble;
   let repositorioInmuebleStub: SinonStubbedInstance<RepositorioInmueble>;
+  let daoInmueble: SinonStubbedInstance<DaoInmueble>
 
   beforeEach(() => {
     repositorioInmuebleStub = createStubObj<RepositorioInmueble>([
-      'actualizarDatosDePago',
-      'guardar',
-      'existeDireccionInmueble',
-      'existeInmueble',
-      'obtenerInmueblePorId',
+      "actualizarFechasDePago",
+      'asignarInmueble',
+      "guardar",
       'editar'
     ]);
     servicioRegistrarInmueble = new ServicioRegistrarInmueble(
-      repositorioInmuebleStub,
+      repositorioInmuebleStub, daoInmueble
     );
   });
 

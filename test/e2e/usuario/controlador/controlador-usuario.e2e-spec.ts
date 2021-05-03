@@ -29,7 +29,7 @@ describe('Pruebas al controlador de usuarios', () => {
    **/
   beforeAll(async () => {
     repositorioUsuario = createStubObj<RepositorioUsuario>(
-      ['existeCedulaUsuario', 'obtenerUsuarioId', 'guardar'],
+      ['guardar'],
       sinonSandbox,
     );
     daoUsuario = createStubObj<DaoUsuario>(['listar'], sinonSandbox);
@@ -99,7 +99,7 @@ describe('Pruebas al controlador de usuarios', () => {
       cedula: 12312312,
     };
     const mensaje = `El documento ${usuario.cedula} ya está registrado`;
-    repositorioUsuario.existeCedulaUsuario.returns(Promise.resolve(true));
+    daoUsuario.existeCedulaUsuario.returns(Promise.resolve(true));
 
     const response = await request(app.getHttpServer())
       .post('/usuarios')
