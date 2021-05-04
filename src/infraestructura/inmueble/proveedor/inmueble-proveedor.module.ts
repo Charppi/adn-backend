@@ -9,6 +9,7 @@ import { RepositorioInmueble } from 'src/dominio/inmueble/puerto/repositorio/res
 import { ServicioAsignarInmueble } from 'src/dominio/inmueble/servicio/servicio-asignar-inmueble';
 import { ServicioEditarInmueble } from 'src/dominio/inmueble/servicio/servicio-editar-inmueble';
 import { ServicioRegistrarInmueble } from 'src/dominio/inmueble/servicio/servicio-registrar-inmueble';
+import { DaoUsuario } from 'src/dominio/usuario/puerto/dao/dao-usuario';
 import { RepositorioUsuario } from 'src/dominio/usuario/puerto/repositorio/repositorio-usuario';
 import { UsuarioProveedorModule } from 'src/infraestructura/usuario/proveedor/usuario-proveedor.module';
 import { InmuebleEntidad } from '../entidad/inmueble.entidad';
@@ -33,7 +34,7 @@ import { servicioRegistrarInmuebleProveedor } from './servicio/servicio-registra
     },
     {
       provide: ServicioAsignarInmueble,
-      inject: [RepositorioInmueble, DaoInmueble],
+      inject: [RepositorioInmueble, DaoInmueble, DaoUsuario],
       useFactory: servicioAsignarInmuebleProveedor,
     },
     repositorioInmuebleProveedor,

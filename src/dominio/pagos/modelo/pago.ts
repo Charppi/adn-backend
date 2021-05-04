@@ -86,7 +86,7 @@ export class Pago {
     validarTotalAPagarMenorQueValorInmueble() {
         this.setAbonosAnterioresMasActual()
         if (this.abonosAnterioresMasActual > this.valorInmueble) {
-            const mensaje = this.abonosAnterioresMasActual > 0
+            const mensaje = this.#pagosAnteriores > 0
                 ? `La suma de los abonos mas el pago actual supera el valor del inmueble. Total abonado hasta ahora: $${this.#pagosAnteriores}`
                 : "El valor ingresado para pagar supera el valor del inmueble";
             throw new ErrorDeNegocio(mensaje);

@@ -39,7 +39,7 @@ describe('Pruebas al controlador de usuarios', () => {
         AppLogger,
         {
           provide: ServicioRegistrarUsuario,
-          inject: [RepositorioUsuario],
+          inject: [RepositorioUsuario, DaoUsuario],
           useFactory: servicioRegistrarUsuarioProveedor,
         },
         { provide: RepositorioUsuario, useValue: repositorioUsuario },
@@ -64,10 +64,16 @@ describe('Pruebas al controlador de usuarios', () => {
     await app.close();
   });
 
-  it('debería listar los usuarios registrados', () => {
+  it('Debería listar los usuarios registrados', () => {
     const usuarios: any[] = [
-      { nombre: 'Lorem ipsum', fechaCreacion: new Date().toISOString() },
-    ];
+      {
+        "id": 1,
+        "nombre": "Carlos",
+        "apellido": "Mendez",
+        "cedula": 1006453353,
+        "fechaCreacion": "2021-05-04T14:29:03.000Z"
+      }
+    ]
     daoUsuario.listar.returns(Promise.resolve(usuarios));
 
     return request(app.getHttpServer())
@@ -76,7 +82,7 @@ describe('Pruebas al controlador de usuarios', () => {
       .expect(usuarios);
   });
 
-  it('debería fallar al registar un usuario con cedula muy corta', async () => {
+  it('Debería fallar al registar un usuario con cedula muy corta', async () => {
     const usuario: ComandoRegistrarUsuario = {
       nombre: "Carlos",
       apellido: "Mendez",
@@ -92,7 +98,7 @@ describe('Pruebas al controlador de usuarios', () => {
     expect(response.body.statusCode).toBe(HttpStatus.BAD_REQUEST);
   });
 
-  it('debería fallar al registar un usuario ya existente', async () => {
+  it('Debería fallar al registar un usuario ya existente', async () => {
     const usuario: ComandoRegistrarUsuario = {
       nombre: 'Lorem ipsum',
       apellido: "",
@@ -108,4 +114,20 @@ describe('Pruebas al controlador de usuarios', () => {
     expect(response.body.message).toBe(mensaje);
     expect(response.body.statusCode).toBe(HttpStatus.BAD_REQUEST);
   });
+
+  it('Debería crear al usuario', async () => {
+    const usuario: ComandoRegistrarUsuario = {
+      "nombre": "Carlos",
+      "apellido": "Mendez",
+      "cedula": 1006453353
+    }
+
+    daoUsuario.existeCedulaUsuario.returns(Promise.resolve(false))
+
+    await request(app.getHttpServer())
+      .post('/usuarios')
+      .send(usuario)
+      .expect(HttpStatus.CREATED);
+  });
+
 });

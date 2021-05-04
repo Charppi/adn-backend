@@ -24,4 +24,7 @@ export class InmuebleDto {
   @ApiProperty()
   usuario?: UsuarioDto
 
+  @ApiProperty()
+  usuarioId?: number
+
 }

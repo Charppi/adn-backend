@@ -29,6 +29,6 @@ import { UsuarioEntidad } from '../entidad/usuario.entidad';
     ManejadorListarUsuario,
     RepositorioUsuario,
     DaoUsuario
-  ],
+  ]
 })
 export class UsuarioProveedorModule { }

@@ -31,7 +31,7 @@ describe('Pruebas al controlador de inmueble', () => {
     let app: INestApplication;
     let repositorioInmueble: SinonStubbedInstance<RepositorioInmueble>;
     let daoInmueble: SinonStubbedInstance<DaoInmueble>;
-
+    let daoUsuario: SinonStubbedInstance<DaoUsuario>
     /**
      * No Inyectar los módulos completos (Se trae TypeORM y genera lentitud al levantar la prueba, traer una por una las dependencias)
      **/
@@ -40,6 +40,7 @@ describe('Pruebas al controlador de inmueble', () => {
             ["guardar", "asignarInmueble", "actualizarFechasDePago", "editar"],
             sinonSandbox,
         );
+        daoUsuario = createStubObj<DaoUsuario>(["existeCedulaUsuario", "listar", "obtenerUsuarioId"], sinonSandbox)
         daoInmueble = createStubObj<DaoInmueble>(["listar", "existeDireccionInmueble", "existeInmueble", "obtenerInmueblePorId"], sinonSandbox);
         const moduleRef = await Test.createTestingModule({
             controllers: [InmuebleControlador],
@@ -57,11 +58,12 @@ describe('Pruebas al controlador de inmueble', () => {
                 },
                 {
                     provide: ServicioAsignarInmueble,
-                    inject: [RepositorioInmueble, DaoInmueble],
+                    inject: [RepositorioInmueble, DaoInmueble, DaoUsuario],
                     useFactory: servicioAsignarInmuebleProveedor,
                 },
                 { provide: RepositorioInmueble, useValue: repositorioInmueble },
                 { provide: DaoInmueble, useValue: daoInmueble },
+                { provide: DaoUsuario, useValue: daoUsuario },
                 ManejadorAsignarInmueble,
                 ManejadorEditarInmueble,
                 ManejadorRegistrarInmueble,
@@ -84,17 +86,22 @@ describe('Pruebas al controlador de inmueble', () => {
         await app.close();
     });
 
-    it('debería listar los inmuebles registrados', () => {
+    const inmueble: ComandoRegistrarInmueble = {
+        direccion: "Calle 17 # 31 - 17",
+        valor: 150000
+    };
+
+    it('Debería listar los inmuebles registrados', () => {
         const inmuebles: any[] = [
             {
-                id: 1,
-                direccion: 'Lorem ipsum',
-                valor: 150290,
-                fechaAsignacion: new Date().toDateString(),
-                fechaInicioPago: new Date().toISOString(),
-                fechaLimitePago: new Date().toISOString(),
-                usuarioId: 1
-            },
+                "id": 1,
+                "direccion": "Calle 16 # 31 - 17",
+                "valor": 250000,
+                "fechaAsignacion": "2021-05-04T14:38:51.000Z",
+                "fechaInicioPago": "2021-05-04T14:38:51.000Z",
+                "fechaLimitePago": "2021-06-04T14:38:51.000Z",
+                "usuarioId": 1
+            }
         ];
         daoInmueble.listar.returns(Promise.resolve(inmuebles));
 
@@ -104,31 +111,66 @@ describe('Pruebas al controlador de inmueble', () => {
             .expect(inmuebles);
     });
 
-    it('debería fallar al registar un inmueble con una direccion existente', async () => {
-        const inmueble: ComandoRegistrarInmueble = {
-            direccion: "Calle 17 # 31 - 17",
-            valor: 150000
-        };
-        const mensaje = `Ya existe un inmueble para la dirección ${inmueble.direccion}`;
-
-        const response = await request(app.getHttpServer())
+    it('Debería registar un inmueble', async () => {
+        await request(app.getHttpServer())
             .post('/inmuebles')
             .send(inmueble)
-            .expect(HttpStatus.BAD_REQUEST);
+            .expect(HttpStatus.CREATED);
+    });
+
+    it('Debería fallar al registar un inmueble con una direccion existente', async () => {
+
+        daoInmueble.existeDireccionInmueble.returns(Promise.resolve(true))
+
+        const mensaje = `Ya existe un inmueble para la dirección ${inmueble.direccion}`;
+        const response = await request(app.getHttpServer())
+            .post('/inmuebles')
+            .send(inmueble);
+
         expect(response.body.message).toBe(mensaje);
         expect(response.body.statusCode).toBe(HttpStatus.BAD_REQUEST);
     });
 
-    it(`debería fallar al registar un inmueble con un valor menor al límite (actualmente $${VALOR_MINIMO_INMUEBLE})`, async () => {
-        const inmueble: ComandoRegistrarInmueble = {
-            direccion: "Calle 17 # 31 - 17",
-            valor: 140000
-        };
+    it('Debería fallar al asignar un inmueble con un id de inmueble no válido', async () => {
+        daoInmueble.obtenerInmueblePorId.returns(Promise.resolve(null))
+        const data = {
+            "id": 1,
+            "idUsuarioAsignado": 1
+        }
+        const mensaje = `No existe un inmueble con el identificador ${data.id}`;
+        const response = await request(app.getHttpServer())
+            .put('/inmuebles/asignar')
+            .send(data);
+
+        expect(response.body.message).toBe(mensaje);
+        expect(response.body.statusCode).toBe(HttpStatus.BAD_REQUEST);
+    })
+
+    it('Debería fallar al asignar un inmueble con un id de usuario no válido', async () => {
+        daoInmueble.obtenerInmueblePorId.returns(Promise.resolve(inmueble))
+        daoUsuario.obtenerUsuarioId.returns(Promise.resolve(null))
+        const data = {
+            "id": 1,
+            "idUsuarioAsignado": 1
+        }
+        const mensaje = `No se encontró un usuario con el id ${data.idUsuarioAsignado}`;
+        const response = await request(app.getHttpServer())
+            .put('/inmuebles/asignar')
+            .send(data);
+
+        expect(response.body.message).toBe(mensaje);
+        expect(response.body.statusCode).toBe(HttpStatus.BAD_REQUEST);
+    })
+
+    it(`Debería fallar al registar un inmueble con un valor menor al límite (actualmente $${VALOR_MINIMO_INMUEBLE})`, async () => {
+        const inmueble = {
+            "direccion": "Calle 16 lll# 31 - 17",
+            "valor": VALOR_MINIMO_INMUEBLE - 1
+        }
         const mensaje = `El valor mínimo de un inmueble es de ${VALOR_MINIMO_INMUEBLE}`;
         const response = await request(app.getHttpServer())
             .post('/inmuebles')
             .send(inmueble)
-            .expect(HttpStatus.BAD_REQUEST);
         expect(response.body.message).toBe(mensaje);
         expect(response.body.statusCode).toBe(HttpStatus.BAD_REQUEST);
     });
