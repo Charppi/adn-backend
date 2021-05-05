@@ -45,7 +45,6 @@ export class ServicioRegistrarPago {
             inmueble.valor
         )
 
-
         await this._repositorioPago.guardar(pago);
 
         const fechaInicioPago = this.setNuevaFechaDePago(inmueble.fechaInicioPago)

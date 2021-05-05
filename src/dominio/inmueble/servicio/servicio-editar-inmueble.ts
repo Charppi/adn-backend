@@ -11,16 +11,7 @@ export class ServicioEditarInmueble {
 
     async ejecutar(inmueble: Inmueble): Promise<void> {
         await this.validarExistenciaDeInmueble(inmueble);
-        this.validarFechaAsignacion(inmueble);
         await this._repositorioInmueble.editar(inmueble);
-    }
-
-    private validarFechaAsignacion(inmueble: Inmueble) {
-        if (!inmueble.fechaAsignacion && inmueble.usuarioId) {
-            throw new ErrorDeNegocio(
-                `Si va a asignar el inmueble a un nuevo usuario, debe ingresar la fecha de asignación del inmueble`
-            );
-        }
     }
 
     private async validarExistenciaDeInmueble(inmueble: Inmueble) {

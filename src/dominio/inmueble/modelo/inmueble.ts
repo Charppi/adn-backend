@@ -19,7 +19,7 @@ export class Inmueble {
 
     private validarValor(valor: number) {
         if (valor < VALOR_MINIMO_INMUEBLE) {
-            throw new ErrorValorMinimo(`El valor mínimo de un inmueble es de ${VALOR_MINIMO_INMUEBLE}`)
+            throw new ErrorValorMinimo(`El valor mínimo de un inmueble es de ${VALOR_MINIMO_INMUEBLE}`);
         }
     }
 

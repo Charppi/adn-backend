@@ -38,6 +38,7 @@ export class Pago {
         this.#pagosAnteriores = pagosAnteriores
         this.fechaLimite = fechaLimite
         this.valorInmueble = valorInmueble
+        this.#fechaPago = new Date()
         if (id) this.#id = id
 
         this.validacionesYGeneracionDePago()

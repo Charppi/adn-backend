@@ -14,10 +14,9 @@ export class RepositorioPagoMysql implements RepositorioPago {
         private readonly _daoInmueble: DaoInmueble,
     ) { }
 
-    async guardar({ cargo, desde, hasta, valor, inmuebleId }: Pago): Promise<void> {
+    async guardar({ cargo, desde, hasta, valor, inmuebleId, fechaPago }: Pago): Promise<void> {
         const inmueble = await this._daoInmueble.obtenerInmueblePorId(inmuebleId)
         const usuario = inmueble.usuario
-        const fechaPago = new Date()
         this.repositorio.createQueryBuilder()
             .insert()
             .values({ cargo, desde, hasta, valor, inmueble, usuario, fechaPago })

@@ -5,36 +5,24 @@ import { SinonStubbedInstance } from 'sinon';
 import { createStubObj } from '../../../util/create-object.stub';
 import { DaoInmueble } from 'src/dominio/inmueble/puerto/dao/dao-inmueble';
 import { ErrorDeNegocio } from 'src/dominio/errores/error-de-negocio';
-import { ErrorValorMinimo } from 'src/dominio/errores/error-valor-minimo';
 
-describe('ServicioRegistrarInmueble', () => {
+describe('Pruebas al servicio de registro de inmuebles', () => {
   let servicioRegistrarInmueble: ServicioRegistrarInmueble;
-  let repositorioInmuebleStub: SinonStubbedInstance<RepositorioInmueble>;
-  let daoInmueble: SinonStubbedInstance<DaoInmueble>
+  let repositorioInmueble: SinonStubbedInstance<RepositorioInmueble>;
+  let daoInmueble: SinonStubbedInstance<DaoInmueble>;
 
   beforeEach(() => {
-    repositorioInmuebleStub = createStubObj<RepositorioInmueble>([
+    repositorioInmueble = createStubObj<RepositorioInmueble>([
       "actualizarFechasDePago",
       "asignarInmueble",
       "guardar",
       "editar"
     ]);
     daoInmueble = createStubObj<DaoInmueble>(["existeDireccionInmueble", "existeInmueble"])
-    servicioRegistrarInmueble = new ServicioRegistrarInmueble(
-      repositorioInmuebleStub, daoInmueble
-    );
+    servicioRegistrarInmueble = new ServicioRegistrarInmueble(repositorioInmueble, daoInmueble);
   });
 
-
-  it(`Debería fallar si se envía un valor menor a ${VALOR_MINIMO_INMUEBLE}`, async () => {
-    try {
-      servicioRegistrarInmueble.ejecutar(new Inmueble("Calle 123", VALOR_MINIMO_INMUEBLE - 1))
-    } catch (error) {
-      expect(error).toBeInstanceOf(ErrorValorMinimo)
-    }
-  })
-
-  it('Debería fallar si encuentra un inmueble con una dirección ya registrada', async () => {
+  it("Debería fallar si encuentra un inmueble con una dirección ya registrada", async () => {
     daoInmueble.existeDireccionInmueble.returns(Promise.resolve(true));
     try {
       await servicioRegistrarInmueble.ejecutar(new Inmueble("Calle 123", VALOR_MINIMO_INMUEBLE))
@@ -42,4 +30,12 @@ describe('ServicioRegistrarInmueble', () => {
       expect(error).toBeInstanceOf(ErrorDeNegocio)
     }
   })
+
+  it("Debería registrar el inmueble", async () => {
+    const inmueble = new Inmueble("Calle 123", VALOR_MINIMO_INMUEBLE)
+    await servicioRegistrarInmueble.ejecutar(inmueble)
+    expect(repositorioInmueble.guardar.getCalls().length).toBe(1)
+    expect(repositorioInmueble.guardar.calledWith(inmueble)).toBeTruthy();
+  })
+
 });
