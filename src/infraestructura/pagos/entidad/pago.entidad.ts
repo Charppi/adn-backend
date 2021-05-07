@@ -12,10 +12,10 @@ export class PagoEntidad {
     valor: number;
 
     @Column()
-    cargo: number
+    cargo: number;
 
     @Column()
-    total: number
+    total: number;
 
     @Column()
     fechaPago: Date;
@@ -27,9 +27,9 @@ export class PagoEntidad {
     hasta: Date;
 
     @ManyToOne(() => UsuarioEntidad, usuario => usuario.inmuebles, { nullable: true })
-    usuario: UsuarioEntidad
+    usuario: UsuarioEntidad;
 
     @ManyToOne(() => InmuebleEntidad, inmueble => inmueble.pagos, { nullable: true })
-    inmueble: InmuebleEntidad
+    inmueble: InmuebleEntidad;
 
 }

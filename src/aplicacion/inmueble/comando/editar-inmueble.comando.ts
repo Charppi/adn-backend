@@ -6,7 +6,7 @@ export class ComandoEditarInmueble {
 
     @ApiProperty({ required: true, example: 1 })
     @IsNumber()
-    public id: number
+    public id: number;
 
     @ApiProperty({ required: true, example: 'Calle 123' })
     @IsString()
@@ -19,10 +19,10 @@ export class ComandoEditarInmueble {
     @IsOptional()
     @ApiProperty({ type: Date, required: false })
     @IsDateString()
-    public fechaAsignacion?: Date
+    public fechaAsignacion?: Date;
 
     @IsOptional()
     @IsNumber()
     @ApiProperty({ required: false, nullable: true })
-    public idUsuarioAsignado?: number
+    public idUsuarioAsignado?: number;
 }

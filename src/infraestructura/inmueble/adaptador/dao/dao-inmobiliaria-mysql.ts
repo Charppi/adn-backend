@@ -12,22 +12,24 @@ export class DaoInmobiliariaMysql implements DaoInmueble {
     private readonly entityManager: EntityManager,
   ) { }
   totalInmuebles(): Promise<number> {
-    return this.entityManager.count(InmuebleEntidad)
+    return this.entityManager.count(InmuebleEntidad);
   }
   async existeDireccionInmueble(direccion: string): Promise<boolean> {
-    return (await this.entityManager.count(InmuebleEntidad, { where: { direccion } })) > 0
+    return (await this.entityManager.count(InmuebleEntidad, { where: { direccion } })) > 0;
   }
   async existeInmueble(id: number): Promise<boolean> {
-    return (await this.entityManager.count(InmuebleEntidad, { where: { id } })) > 0
+    return (await this.entityManager.count(InmuebleEntidad, { where: { id } })) > 0;
   }
 
   async obtenerInmueblePorId(id: number): Promise<InmuebleDto> {
-    return await this.entityManager.getRepository(InmuebleEntidad).findOne(id, { relations: ["usuario"] })
+    return await this.entityManager.getRepository(InmuebleEntidad).findOne(id, { relations: ["usuario"] });
   }
 
   async listar(limit: number, offset: number): Promise<InmuebleDto[]> {
+    const queryLimit = (limit > 0 && offset > 0) ? ` LIMIT ${limit} OFFSET ${offset};` : ";";
+
     return this.entityManager.query(
-      `SELECT * FROM inmueble${(limit > 0 && offset > 0) ? ` LIMIT ${limit} OFFSET ${offset};` : `;`}`,
+      `SELECT * FROM inmueble${queryLimit}`,
     );
   }
 }

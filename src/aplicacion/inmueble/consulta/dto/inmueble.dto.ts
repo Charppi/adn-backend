@@ -4,7 +4,7 @@ import { UsuarioDto } from 'src/aplicacion/usuario/consulta/dto/usuario.dto';
 export class InmuebleDto {
 
   @ApiProperty()
-  id?: number
+  id?: number;
 
   @ApiProperty({ example: 'Calle #1 2-3' })
   direccion: string;
@@ -22,9 +22,9 @@ export class InmuebleDto {
   fechaInicioPago?: Date;
 
   @ApiProperty()
-  usuario?: UsuarioDto
+  usuario?: UsuarioDto;
 
   @ApiProperty()
-  usuarioId?: number
+  usuarioId?: number;
 
 }

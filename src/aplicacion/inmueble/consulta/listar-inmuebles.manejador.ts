@@ -9,7 +9,7 @@ export class ManejadorListarInmuebles {
   async ejecutarListar(limit: number, offset: number): Promise<{ inmuebles: InmuebleDto[], total: number }> {
     const inmuebles = await this._daoInmueble.listar(limit, offset);
     const total = await this._daoInmueble.totalInmuebles();
-    return { inmuebles, total }
+    return { inmuebles, total };
   }
 
   async ejecutarObtenerPorId(id: number): Promise<InmuebleDto> {

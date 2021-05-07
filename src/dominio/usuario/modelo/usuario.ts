@@ -11,12 +11,12 @@ export class Usuario {
     this.validarTamanoCedula(cedula)
     this.#nombre = nombre;
     this.#apellido = apellido;
-    this.#cedula = cedula
-    if (id) this.#id = id
+    this.#cedula = cedula;
+    if (id) { this.#id = id; }
   }
 
   validarTamanoCedula(cedula: number) {
-    if (String(cedula).length < TAMANO_CEDULA) throw new ErrorLongitudInvalida(`La cedula debe tener por lo menos ${TAMANO_CEDULA} dígitos`)
+    if (String(cedula).length < TAMANO_CEDULA) throw new ErrorLongitudInvalida(`La cedula debe tener por lo menos ${TAMANO_CEDULA} dígitos`);
   }
 
   get nombre(): string {

@@ -9,12 +9,12 @@ export class Inmueble {
     readonly #fechaAsignacion: Date
     readonly #usuarioId: number
     constructor(direccion: string, valor: number, id?: number, fechaAsignacion?: Date, usuarioId?: number) {
-        this.validarValor(valor)
-        this.#direccion = direccion
-        this.#valor = valor
-        if (fechaAsignacion) this.#fechaAsignacion = fechaAsignacion
-        if (usuarioId) this.#usuarioId = usuarioId
-        if (id) this.#id = id
+        this.validarValor(valor);
+        this.#direccion = direccion;
+        this.#valor = valor;
+        if (fechaAsignacion) this.#fechaAsignacion = fechaAsignacion;
+        if (usuarioId) this.#usuarioId = usuarioId;
+        if (id) { this.#id = id; }
     }
 
     private validarValor(valor: number) {
@@ -24,18 +24,18 @@ export class Inmueble {
     }
 
     public get direccion(): string {
-        return this.#direccion
+        return this.#direccion;
     }
     public get valor(): number {
-        return this.#valor
+        return this.#valor;
     }
     public get fechaAsignacion(): Date {
-        return this.#fechaAsignacion
+        return this.#fechaAsignacion;
     }
     public get usuarioId(): number {
-        return this.#usuarioId
+        return this.#usuarioId;
     }
     public get id(): number {
-        return this.#id
+        return this.#id;
     }
 }

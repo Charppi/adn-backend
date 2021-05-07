@@ -12,8 +12,6 @@ export class DaoPagoMysql implements DaoPago {
         private readonly entityManager: EntityManager,
     ) { }
     obtenerPagoPorId(inmuebleId: number): Promise<PagoDto> {
-        console.log(inmuebleId);
-        
         return this.entityManager.query(`SELECT * from pago WHERE inmuebleId = ${inmuebleId}`);
     }
     async obtenerTotalAbonosAnteriores(desde: Date, hasta: Date, usuarioId: number, inmuebleId: number): Promise<number> {
@@ -25,12 +23,12 @@ export class DaoPagoMysql implements DaoPago {
             .andWhere("pago.usuarioId = :usuarioId", { usuarioId })
             .andWhere("pago.inmuebleId = :inmuebleId", { inmuebleId })
             .orderBy("pago.id", "DESC")
-            .getRawOne()
+            .getRawOne();
 
-        return totalPagos | 0
+        return totalPagos | 0;
     }
-    async obtenerFechaUltimoPago(desde: Date, hasta: Date, usuarioId: number, inmuebleId: number): Promise<Date> {
-        return await this.entityManager.createQueryBuilder()
+    obtenerFechaUltimoPago(desde: Date, hasta: Date, usuarioId: number, inmuebleId: number): Promise<Date> {
+        return this.entityManager.createQueryBuilder()
             .select()
             .from(PagoEntidad, "pago")
             .where("pago.desde = :desde", { desde })
@@ -38,11 +36,10 @@ export class DaoPagoMysql implements DaoPago {
             .andWhere("pago.usuarioId = :usuarioId", { usuarioId })
             .andWhere("pago.inmuebleId = :inmuebleId", { inmuebleId })
             .orderBy("pago.id", "DESC")
-            .getRawOne()
+            .getRawOne();
     }
 
-
-    async listar(): Promise<PagoDto[]> {
+    listar(): Promise<PagoDto[]> {
         return this.entityManager.query(
             'SELECT * from pago',
         );

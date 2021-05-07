@@ -17,7 +17,7 @@ export class ServicioRegistrarPago {
     ) { }
 
     async ejecutar(idInmueble: number, idPagador: number, valor: number): Promise<string> {
-        valor = Number(valor)
+        valor = Number(valor);
         const inmueble = await this.validarExisteInmueble(idInmueble);
 
         this.validarPropietario(inmueble.usuario?.id, idPagador);
@@ -26,14 +26,14 @@ export class ServicioRegistrarPago {
             inmueble.fechaInicioPago,
             inmueble.fechaLimitePago,
             inmueble.usuario.id,
-            inmueble.id)
+            inmueble.id);
 
         let fechaLimitePago = abonosAnteriores > 0 ?
             await this._daoPago.obtenerFechaUltimoPago(
                 inmueble.fechaInicioPago, inmueble.fechaLimitePago,
                 inmueble.usuario.id,
                 inmueble.id)
-            : inmueble.fechaLimitePago
+            : inmueble.fechaLimitePago;
 
         const pago = new Pago(inmueble.fechaInicioPago,
             inmueble.fechaLimitePago,
@@ -43,16 +43,16 @@ export class ServicioRegistrarPago {
             abonosAnteriores,
             fechaLimitePago,
             inmueble.valor
-        )
+        );
 
         await this._repositorioPago.guardar(pago);
 
-        const fechaInicioPago = this.setNuevaFechaDePago(inmueble.fechaInicioPago)
-        fechaLimitePago = this.setNuevaFechaDePago(inmueble.fechaLimitePago)
+        const fechaInicioPago = this.setNuevaFechaDePago(inmueble.fechaInicioPago);
+        fechaLimitePago = this.setNuevaFechaDePago(inmueble.fechaLimitePago);
 
         await this.validarPagoCompletado(pago, inmueble, fechaInicioPago, fechaLimitePago);
 
-        return pago.getMensajeDePagoExitoso(inmueble.valor, inmueble.direccion, inmueble.fechaInicioPago, inmueble.fechaLimitePago)
+        return pago.getMensajeDePagoExitoso(inmueble.valor, inmueble.direccion, inmueble.fechaInicioPago, inmueble.fechaLimitePago);
 
     }
 
@@ -63,7 +63,7 @@ export class ServicioRegistrarPago {
     }
 
     private setNuevaFechaDePago(fechaAntigua: Date): Date {
-        return moment(fechaAntigua).add(1, "month").toDate()
+        return moment(fechaAntigua).add(1, "month").toDate();
     }
 
     private validarPropietario(usuarioId: number, idPagador: number) {
@@ -73,16 +73,16 @@ export class ServicioRegistrarPago {
     }
 
     private async validarExisteInmueble(idInmueble: number) {
-        const inmueble = await this._daoInmueble.obtenerInmueblePorId(idInmueble)
+        const inmueble = await this._daoInmueble.obtenerInmueblePorId(idInmueble);
         if (!inmueble) {
             throw new ErrorDeNegocio(`No se encontró ningún inmueble con el id ${idInmueble}`);
         }
-        return inmueble
+        return inmueble;
     }
 
 
     pagoRealizadoPorActualPropietario(idPropietario: number, idPagador: number) {
-        return idPagador === idPropietario
+        return idPagador === idPropietario;
     }
 
 

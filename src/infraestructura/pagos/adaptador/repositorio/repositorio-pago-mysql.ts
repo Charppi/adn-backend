@@ -20,7 +20,6 @@ export class RepositorioPagoMysql implements RepositorioPago {
         this.repositorio.createQueryBuilder()
             .insert()
             .values({ cargo, desde, hasta, valor, inmueble, usuario, fechaPago, total })
-            .execute()
-
+            .execute();
     }
 }

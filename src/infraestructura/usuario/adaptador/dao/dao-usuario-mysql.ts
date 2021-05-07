@@ -18,19 +18,19 @@ export class DaoUsuarioMysql implements DaoUsuario {
   }
   async existeCedulaUsuarioDiferente(cedula: number, id: number): Promise<UsuarioDto> {
     const [usuario] = await this.entityManager.query(`SELECT * FROM usuario WHERE cedula = ${cedula} AND  id != ${id}`);
-    return usuario
+    return usuario;
   }
   totalUsuarios(): Promise<number> {
-    return this.entityManager.count(UsuarioEntidad)
+    return this.entityManager.count(UsuarioEntidad);
   }
   async existeCedulaUsuario(cedula: number): Promise<boolean> {
-    return (await this.entityManager.count(UsuarioEntidad, { where: { cedula } })) > 0
+    return (await this.entityManager.count(UsuarioEntidad, { where: { cedula } })) > 0;
   }
-  async obtenerUsuarioId(id: number): Promise<UsuarioDto> {
-    return await this.entityManager.findOne(UsuarioEntidad, { where: { id } })
+  obtenerUsuarioId(id: number): Promise<UsuarioDto> {
+    return this.entityManager.findOne(UsuarioEntidad, { where: { id } });
   }
 
-  async listar(limit: number = 0, offset: number = 0): Promise<UsuarioDto[]> {
+  listar(limit = 0, offset = 0): Promise<UsuarioDto[]> {
     return this.entityManager.query(
       `SELECT * FROM USUARIO${(limit > 0 && offset > 0) ? ` LIMIT ${limit} OFFSET ${offset};` : `;`}`,
     );

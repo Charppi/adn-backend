@@ -12,6 +12,6 @@ export class UsuarioDto {
   apellido: string;
 
   @ApiProperty({ example: 123456789 })
-  cedula: number
+  cedula: number;
   
 }

@@ -5,9 +5,9 @@ export class ComandoAsignarInmueble {
 
     @ApiProperty({ required: true, example: 1 })
     @IsNumber()
-    public id: number
+    public id: number;
 
     @IsNumber()
     @ApiProperty({ required: true })
-    public idUsuarioAsignado: number
+    public idUsuarioAsignado: number;
 }

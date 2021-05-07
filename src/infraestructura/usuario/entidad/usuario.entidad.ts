@@ -16,12 +16,12 @@ export class UsuarioEntidad {
   @Column({ unique: true })
   cedula: number;
 
-  @Column()
+  @Column({ default: new Date() })
   fechaCreacion: Date;
 
   @OneToMany(() => InmuebleEntidad, inmueble => inmueble.usuario)
-  inmuebles: InmuebleEntidad[]
+  inmuebles: InmuebleEntidad[];
 
   @OneToMany(() => PagoEntidad, pago => pago.usuario)
-  pagos: PagoEntidad[]
+  pagos: PagoEntidad[];
 }

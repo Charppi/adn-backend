@@ -17,7 +17,7 @@ export class RepositorioInmuebleMysql implements RepositorioInmueble {
       .update()
       .set({ fechaInicioPago, fechaLimitePago })
       .where("id = :id", { id })
-      .execute()
+      .execute();
   }
 
   async guardar(inmueble: Inmueble): Promise<void> {
@@ -35,18 +35,18 @@ export class RepositorioInmuebleMysql implements RepositorioInmueble {
   }
 
   async asignarInmueble(id: number, usuarioId: number) {
-    const fechaAsignacion = new Date()
-    const fechaInicioPago = fechaAsignacion
-    const fechaLimitePago = moment(fechaInicioPago).add(1, "month").toDate()
+    const fechaAsignacion = new Date();
+    const fechaInicioPago = fechaAsignacion;
+    const fechaLimitePago = moment(fechaInicioPago).add(1, "month").toDate();
     await this.repositorio.createQueryBuilder()
       .update()
       .set({ usuarioId, fechaAsignacion, fechaInicioPago, fechaLimitePago })
       .where({ id })
-      .execute()
+      .execute();
   }
 
   async actualizarDatosDePago(inmueble: InmuebleEntidad) {
-    await this.repositorio.save(inmueble)
+    await this.repositorio.save(inmueble);
   }
 
 

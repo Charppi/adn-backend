@@ -1,5 +1,4 @@
 import { ErrorDeNegocio } from 'src/dominio/errores/error-de-negocio';
-import { Usuario } from 'src/dominio/usuario/modelo/usuario';
 import { Inmueble } from '../modelo/inmueble';
 import { DaoInmueble } from '../puerto/dao/dao-inmueble';
 import { RepositorioInmueble } from '../puerto/repositorio/respositorio-inmueble';

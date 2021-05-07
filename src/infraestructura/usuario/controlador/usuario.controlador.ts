@@ -32,7 +32,7 @@ export class UsuarioControlador {
   @Put()
   @UsePipes(new ValidationPipe({ transform: true }))
   async editar(@Body() comandoEditarusuario: ComandoEditarUsuario) {
-    await this._manejadorEditarUsuario.ejecutar(comandoEditarusuario)
+    await this._manejadorEditarUsuario.ejecutar(comandoEditarusuario);
   }
 
   @Get()
@@ -42,6 +42,6 @@ export class UsuarioControlador {
 
   @Get("/todos")
   async listarTodos() {
-    return this._manejadorListarUsuario.todos()
+    return this._manejadorListarUsuario.todos();
   }
 }

@@ -36,13 +36,13 @@ export class InmuebleControlador {
   @Put()
   @UsePipes(new ValidationPipe({ transform: true }))
   async editar(@Body() comandoEditarInmueble: ComandoEditarInmueble) {
-    await this._manejadorEditarInmueble.ejecutar(comandoEditarInmueble)
+    await this._manejadorEditarInmueble.ejecutar(comandoEditarInmueble);
   }
 
   @Put("/asignar")
   @UsePipes(new ValidationPipe({ transform: true }))
   async asignar(@Body() comandoAsignarInmueble: ComandoAsignarInmueble) {
-    await this._manejadorAsignarInmueble.ejecutar(comandoAsignarInmueble)
+    await this._manejadorAsignarInmueble.ejecutar(comandoAsignarInmueble);
   }
 
 

@@ -23,12 +23,12 @@ export class InmuebleEntidad {
   fechaLimitePago: Date;
 
   @Column({ nullable: true })
-  usuarioId: number
+  usuarioId: number;
 
   @ManyToOne(() => UsuarioEntidad, usuario => usuario.inmuebles, { nullable: true })
-  usuario: UsuarioEntidad
+  usuario: UsuarioEntidad;
 
   @OneToMany(() => PagoEntidad, pago => pago.inmueble)
-  pagos: PagoEntidad[]
+  pagos: PagoEntidad[];
 
 }

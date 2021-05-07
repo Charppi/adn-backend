@@ -29,64 +29,64 @@ export class Pago {
         fechaLimite: Date,
         valorInmueble: number,
         id?: number) {
-        this.#desde = desde
-        this.#hasta = hasta
-        this.#valor = valor
-        this.#usuarioId = usuarioId
-        this.#fechaPago = new Date()
-        this.#inmuebleId = inmuebleId
-        this.#pagosAnteriores = pagosAnteriores
-        this.fechaLimite = fechaLimite
-        this.valorInmueble = valorInmueble
-        this.#fechaPago = new Date()
-        if (id) this.#id = id
+        this.#desde = desde;
+        this.#hasta = hasta;
+        this.#valor = valor;
+        this.#usuarioId = usuarioId;
+        this.#fechaPago = new Date();
+        this.#inmuebleId = inmuebleId;
+        this.#pagosAnteriores = pagosAnteriores;
+        this.fechaLimite = fechaLimite;
+        this.valorInmueble = valorInmueble;
+        this.#fechaPago = new Date();
+        if (id) { this.#id = id; }
 
-        this.validacionesYGeneracionDePago()
+        this.validacionesYGeneracionDePago();
 
     }
 
     validacionesYGeneracionDePago() {
-        this.setDiasPagoVencidos()
-        this.setValorCargoDiasVencidos()
-        this.setTotal()
-        this.validarTotalAPagarMenorQueValorInmueble()
+        this.setDiasPagoVencidos();
+        this.setValorCargoDiasVencidos();
+        this.setTotal();
+        this.validarTotalAPagarMenorQueValorInmueble();
     }
 
     public setDiasPagoVencidos() {
-        const ahora = moment()
-        const limite = moment(this.fechaLimite)
-        const diasVencidos = ahora.diff(limite, "days")
-        this.diasVencidos = diasVencidos > 0 ? diasVencidos : 0
+        const ahora = moment();
+        const limite = moment(this.fechaLimite);
+        const diasVencidos = ahora.diff(limite, "days");
+        this.diasVencidos = diasVencidos > 0 ? diasVencidos : 0;
     }
 
     public setValorCargoDiasVencidos() {
-        this.#cargo = (this.#valor * CARGO_POR_DIA_VENCIDO) * this.diasVencidos
+        this.#cargo = (this.#valor * CARGO_POR_DIA_VENCIDO) * this.diasVencidos;
     }
 
     public setTotal() {
-        this.total = this.cargo + this.#valor
+        this.total = this.cargo + this.#valor;
 
     }
 
     setAbonosAnterioresMasActual() {
-        this.abonosAnterioresMasActual = this.#pagosAnteriores + this.#valor
+        this.abonosAnterioresMasActual = this.#pagosAnteriores + this.#valor;
     }
- 
+
     public getMensajeDePagoExitoso(valorInmueble: number, direccion: string, fechaInicioPago: Date, fechaLimitePago: Date) {
-        const fechaInicioPagoFormateada = moment(fechaInicioPago).format("YYYY-MM-DD")
-        const fechaLimitePagoFormateada = moment(fechaLimitePago).format("YYYY-MM-DD")
+        const fechaInicioPagoFormateada = moment(fechaInicioPago).format("YYYY-MM-DD");
+        const fechaLimitePagoFormateada = moment(fechaLimitePago).format("YYYY-MM-DD");
 
         return this.abonosAnterioresMasActual == valorInmueble
             ? `El pago del inmueble ubicado en la dirección ${direccion}, por el periodo de ${fechaInicioPagoFormateada} hasta ${fechaLimitePagoFormateada} ha sido completado. Se han actualizado las fechas de pago para el siguiente corte. Muchas gracias por su transacción.`
-            : `El abono del inmueble ubicado en la dirección ${direccion}, por el periodo de ${fechaInicioPagoFormateada} hasta ${fechaLimitePagoFormateada} ha sido recibido. Recuerde que aún queda un saldo bruto de $${valorInmueble - this.abonosAnterioresMasActual}. Muchas gracias por su transacción.`
+            : `El abono del inmueble ubicado en la dirección ${direccion}, por el periodo de ${fechaInicioPagoFormateada} hasta ${fechaLimitePagoFormateada} ha sido recibido. Recuerde que aún queda un saldo bruto de $${valorInmueble - this.abonosAnterioresMasActual}. Muchas gracias por su transacción.`;
     }
 
     pagoCompletado(valorInmueble: number): boolean {
-        return this.abonosAnterioresMasActual === valorInmueble
+        return this.abonosAnterioresMasActual === valorInmueble;
     }
 
     validarTotalAPagarMenorQueValorInmueble() {
-        this.setAbonosAnterioresMasActual()
+        this.setAbonosAnterioresMasActual();
         if (this.abonosAnterioresMasActual > this.valorInmueble) {
             const mensaje = this.#pagosAnteriores > 0
                 ? `La suma de los abonos mas el pago actual supera el valor del inmueble. Total abonado hasta ahora: $${this.#pagosAnteriores}`
@@ -96,29 +96,29 @@ export class Pago {
     }
 
     public get fechaPago(): Date {
-        return this.#fechaPago
+        return this.#fechaPago;
     }
     public get inmuebleId(): number {
-        return this.#inmuebleId
+        return this.#inmuebleId;
     }
     public get desde(): Date {
-        return this.#desde
+        return this.#desde;
     }
     public get hasta(): Date {
-        return this.#hasta
+        return this.#hasta;
     }
     public get valor(): number {
-        return this.#valor
+        return this.#valor;
     }
     public get usuario(): number {
-        return this.#usuarioId
+        return this.#usuarioId;
     }
     public get id(): number {
-        return this.#id
+        return this.#id;
     }
 
     public get cargo(): number {
-        return this.#cargo
+        return this.#cargo;
     }
 
 }

@@ -13,7 +13,7 @@ export class ServicioAsignarInmueble {
     async ejecutar(inmuebleId: number, usuarioId: number): Promise<void> {
         await this.validarExistenciaInmueble(inmuebleId);
         await this.validarUsuario(usuarioId);
-        await this.prepararInmueble(inmuebleId, usuarioId)
+        await this.prepararInmueble(inmuebleId, usuarioId);
     }
 
 
@@ -35,10 +35,10 @@ export class ServicioAsignarInmueble {
 
     }
     private async prepararInmueble(inmuebleId: number, usuarioId: number | null) {
-        usuarioId = usuarioId === 0 ? null : usuarioId
-        const fechaAsignacion = usuarioId ? new Date() : null
-        const fechaInicioPago = usuarioId ? fechaAsignacion : null
-        const fechaLimitePago = usuarioId ? moment(fechaInicioPago).add(1, "month").toDate() : null
+        usuarioId = usuarioId === 0 ? null : usuarioId;
+        const fechaAsignacion = usuarioId ? new Date() : null;
+        const fechaInicioPago = usuarioId ? fechaAsignacion : null;
+        const fechaLimitePago = usuarioId ? moment(fechaInicioPago).add(1, "month").toDate() : null;
         await this._repositorioInmueble.asignarInmueble(inmuebleId,
             usuarioId,
             fechaAsignacion,

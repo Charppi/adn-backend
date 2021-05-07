@@ -9,12 +9,12 @@ export class ManejadorListarUsuario {
 
   async paginacion(limit: number, offset: number): Promise<{ usuarios: UsuarioDto[], total: number }> {
     const usuarios = await this._daoUsuario.listar(limit, offset);
-    const total = await this._daoUsuario.totalUsuarios()
-    return { usuarios, total }
+    const total = await this._daoUsuario.totalUsuarios();
+    return { usuarios, total };
   }
 
-  async todos() {
-    return await this._daoUsuario.listarTodos()
+  todos() {
+    return this._daoUsuario.listarTodos()
   }
 
 }

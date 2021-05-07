@@ -1,5 +1,4 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { UsuarioEntidad } from 'src/infraestructura/usuario/entidad/usuario.entidad';
 
 export class PagoDto {
 
@@ -19,5 +18,5 @@ export class PagoDto {
     hasta: Date;
 
     @ApiProperty()
-    usuarioId: number
+    usuarioId: number;
 }
