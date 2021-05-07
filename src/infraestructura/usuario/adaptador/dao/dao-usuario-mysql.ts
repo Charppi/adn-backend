@@ -11,6 +11,18 @@ export class DaoUsuarioMysql implements DaoUsuario {
     @InjectEntityManager()
     private readonly entityManager: EntityManager,
   ) { }
+  listarTodos(): Promise<UsuarioDto[]> {
+    return this.entityManager.query(
+      `SELECT * FROM USUARIO;`,
+    );
+  }
+  async existeCedulaUsuarioDiferente(cedula: number, id: number): Promise<UsuarioDto> {
+    const [usuario] = await this.entityManager.query(`SELECT * FROM usuario WHERE cedula = ${cedula} AND  id != ${id}`);
+    return usuario
+  }
+  totalUsuarios(): Promise<number> {
+    return this.entityManager.count(UsuarioEntidad)
+  }
   async existeCedulaUsuario(cedula: number): Promise<boolean> {
     return (await this.entityManager.count(UsuarioEntidad, { where: { cedula } })) > 0
   }
@@ -18,9 +30,9 @@ export class DaoUsuarioMysql implements DaoUsuario {
     return await this.entityManager.findOne(UsuarioEntidad, { where: { id } })
   }
 
-  async listar(): Promise<UsuarioDto[]> {
+  async listar(limit: number = 0, offset: number = 0): Promise<UsuarioDto[]> {
     return this.entityManager.query(
-      'SELECT * FROM USUARIO',
+      `SELECT * FROM USUARIO${(limit > 0 && offset > 0) ? ` LIMIT ${limit} OFFSET ${offset};` : `;`}`,
     );
   }
 }

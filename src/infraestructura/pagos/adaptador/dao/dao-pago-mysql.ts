@@ -11,8 +11,10 @@ export class DaoPagoMysql implements DaoPago {
         @InjectEntityManager()
         private readonly entityManager: EntityManager,
     ) { }
-    obtenerPagoPorId(id: number): Promise<PagoDto> {
-        return this.entityManager.query(`SELECT * from pago WHERE id = :id`, [id]);
+    obtenerPagoPorId(inmuebleId: number): Promise<PagoDto> {
+        console.log(inmuebleId);
+        
+        return this.entityManager.query(`SELECT * from pago WHERE inmuebleId = ${inmuebleId}`);
     }
     async obtenerTotalAbonosAnteriores(desde: Date, hasta: Date, usuarioId: number, inmuebleId: number): Promise<number> {
         const { totalPagos } = await this.entityManager.createQueryBuilder()

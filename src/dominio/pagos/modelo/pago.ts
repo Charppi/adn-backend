@@ -71,12 +71,13 @@ export class Pago {
     setAbonosAnterioresMasActual() {
         this.abonosAnterioresMasActual = this.#pagosAnteriores + this.#valor
     }
-
+ 
     public getMensajeDePagoExitoso(valorInmueble: number, direccion: string, fechaInicioPago: Date, fechaLimitePago: Date) {
         const fechaInicioPagoFormateada = moment(fechaInicioPago).format("YYYY-MM-DD")
         const fechaLimitePagoFormateada = moment(fechaLimitePago).format("YYYY-MM-DD")
 
-        return this.abonosAnterioresMasActual === valorInmueble ? `El pago del inmueble ubicado en la dirección ${direccion}, por el periodo de ${fechaInicioPagoFormateada} hasta ${fechaLimitePagoFormateada} ha sido completado. Se han actualizado las fechas de pago para el siguiente corte. Muchas gracias por su transacción.`
+        return this.abonosAnterioresMasActual == valorInmueble
+            ? `El pago del inmueble ubicado en la dirección ${direccion}, por el periodo de ${fechaInicioPagoFormateada} hasta ${fechaLimitePagoFormateada} ha sido completado. Se han actualizado las fechas de pago para el siguiente corte. Muchas gracias por su transacción.`
             : `El abono del inmueble ubicado en la dirección ${direccion}, por el periodo de ${fechaInicioPagoFormateada} hasta ${fechaLimitePagoFormateada} ha sido recibido. Recuerde que aún queda un saldo bruto de $${valorInmueble - this.abonosAnterioresMasActual}. Muchas gracias por su transacción.`
     }
 

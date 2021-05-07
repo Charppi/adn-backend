@@ -1,4 +1,4 @@
-import { IsNumber } from 'class-validator';
+import { IsInt, IsNumber, IsNumberString, Min } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { VALOR_MINIMO_INMUEBLE } from 'src/dominio/inmueble/modelo/inmueble';
 
@@ -12,7 +12,7 @@ export class ComandoRegistrarPago {
     @ApiProperty({ required: true, example: 1 })
     public idPagador: number
 
-    @IsNumber()
+    @IsNumberString()
     @ApiProperty({ required: true, example: VALOR_MINIMO_INMUEBLE })
-    public valor: number;
+    public valor: number; 
 }

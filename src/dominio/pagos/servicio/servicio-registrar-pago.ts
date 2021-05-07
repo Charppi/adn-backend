@@ -17,10 +17,10 @@ export class ServicioRegistrarPago {
     ) { }
 
     async ejecutar(idInmueble: number, idPagador: number, valor: number): Promise<string> {
-
+        valor = Number(valor)
         const inmueble = await this.validarExisteInmueble(idInmueble);
 
-        this.validarPropietario(inmueble.usuario.id, idPagador);
+        this.validarPropietario(inmueble.usuario?.id, idPagador);
 
         const abonosAnteriores = await this._daoPago.obtenerTotalAbonosAnteriores(
             inmueble.fechaInicioPago,

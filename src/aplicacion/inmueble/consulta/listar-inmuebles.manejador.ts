@@ -6,8 +6,10 @@ import { InmuebleDto } from './dto/inmueble.dto';
 export class ManejadorListarInmuebles {
   constructor(private _daoInmueble: DaoInmueble) { }
 
-  async ejecutarListar(): Promise<InmuebleDto[]> {
-    return this._daoInmueble.listar();
+  async ejecutarListar(limit: number, offset: number): Promise<{ inmuebles: InmuebleDto[], total: number }> {
+    const inmuebles = await this._daoInmueble.listar(limit, offset);
+    const total = await this._daoInmueble.totalInmuebles();
+    return { inmuebles, total }
   }
 
   async ejecutarObtenerPorId(id: number): Promise<InmuebleDto> {

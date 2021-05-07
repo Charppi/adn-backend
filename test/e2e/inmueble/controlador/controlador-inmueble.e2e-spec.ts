@@ -41,7 +41,7 @@ describe('Pruebas al controlador de inmueble', () => {
             sinonSandbox,
         );
         daoUsuario = createStubObj<DaoUsuario>(["existeCedulaUsuario", "listar", "obtenerUsuarioId"], sinonSandbox)
-        daoInmueble = createStubObj<DaoInmueble>(["listar", "existeDireccionInmueble", "existeInmueble", "obtenerInmueblePorId"], sinonSandbox);
+        daoInmueble = createStubObj<DaoInmueble>(["listar", "existeDireccionInmueble", "existeInmueble", "obtenerInmueblePorId", "totalInmuebles"], sinonSandbox);
         const moduleRef = await Test.createTestingModule({
             controllers: [InmuebleControlador],
             providers: [
@@ -92,7 +92,7 @@ describe('Pruebas al controlador de inmueble', () => {
     };
 
     it('Debería listar los inmuebles registrados', () => {
-        const inmuebles: any[] = [
+        const inmuebles: any = [
             {
                 "id": 1,
                 "direccion": "Calle 16 # 31 - 17",
@@ -103,12 +103,13 @@ describe('Pruebas al controlador de inmueble', () => {
                 "usuarioId": 1
             }
         ];
+        const data: any = { inmuebles }
         daoInmueble.listar.returns(Promise.resolve(inmuebles));
 
         return request(app.getHttpServer())
             .get('/inmuebles')
             .expect(HttpStatus.OK)
-            .expect(inmuebles);
+            .expect(data);
     });
 
     it('Debería registar un inmueble', async () => {

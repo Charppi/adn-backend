@@ -31,7 +31,8 @@ export class PagoControlador {
     }
 
     @Get('/:id')
-    async obtenerPorId(@Param() id: number): Promise<PagoDto> {
+    @UsePipes(new ValidationPipe({ transform: true }))
+    async obtenerPorId(@Param() { id }: { id: number }): Promise<PagoDto> {
         return this._manejadorListarPagos.ejecutarObtenerPorId(id);
     }
 }

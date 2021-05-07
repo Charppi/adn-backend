@@ -13,6 +13,9 @@ import { ComandoRegistrarUsuario } from 'src/aplicacion/usuario/comando/registra
 import { AppLogger } from 'src/infraestructura/configuracion/ceiba-logger.service';
 import { createSandbox, SinonStubbedInstance } from 'sinon';
 import { createStubObj } from '../../../util/create-object.stub';
+import { ServicioEditarUsuario } from 'src/dominio/usuario/servicio/serrvicio-editar-usuario';
+import { servicioEditarUsuarioProveedor } from 'src/infraestructura/usuario/proveedor/servicio/servicio-editar-usuario.proveedor';
+import { ManejadorEditarUsuario } from 'src/aplicacion/usuario/comando/editar-usuario.manejador';
 
 /**
  * Un sandbox es util cuando el módulo de nest se configura una sola vez durante el ciclo completo de pruebas
@@ -32,7 +35,7 @@ describe('Pruebas al controlador de usuarios', () => {
       ['guardar'],
       sinonSandbox,
     );
-    daoUsuario = createStubObj<DaoUsuario>(["listar", "existeCedulaUsuario", "obtenerUsuarioId"], sinonSandbox);
+    daoUsuario = createStubObj<DaoUsuario>(["listar", "existeCedulaUsuario", "obtenerUsuarioId", "listarTodos", "totalUsuarios", "existeCedulaUsuarioDiferente"], sinonSandbox);
     const moduleRef = await Test.createTestingModule({
       controllers: [UsuarioControlador],
       providers: [
@@ -42,10 +45,16 @@ describe('Pruebas al controlador de usuarios', () => {
           inject: [RepositorioUsuario, DaoUsuario],
           useFactory: servicioRegistrarUsuarioProveedor,
         },
+        {
+          provide: ServicioEditarUsuario,
+          inject: [RepositorioUsuario, DaoUsuario],
+          useFactory: servicioEditarUsuarioProveedor
+        },
         { provide: RepositorioUsuario, useValue: repositorioUsuario },
         { provide: DaoUsuario, useValue: daoUsuario },
         ManejadorRegistrarUsuario,
         ManejadorListarUsuario,
+        ManejadorEditarUsuario
       ],
     }).compile();
 
@@ -65,7 +74,7 @@ describe('Pruebas al controlador de usuarios', () => {
   });
 
   it('Debería listar los usuarios registrados', () => {
-    const usuarios: any[] = [
+    const usuarios: any = [
       {
         "id": 1,
         "nombre": "Carlos",
@@ -74,12 +83,13 @@ describe('Pruebas al controlador de usuarios', () => {
         "fechaCreacion": "2021-05-04T14:29:03.000Z"
       }
     ]
+    const data: any = { usuarios }
     daoUsuario.listar.returns(Promise.resolve(usuarios));
 
     return request(app.getHttpServer())
       .get('/usuarios')
       .expect(HttpStatus.OK)
-      .expect(usuarios);
+      .expect(data);
   });
 
   it('Debería fallar al registar un usuario con cedula muy corta', async () => {

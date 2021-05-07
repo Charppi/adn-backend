@@ -99,7 +99,7 @@ describe('Pruebas al controlador de pagos', () => {
         daoInmueble.obtenerInmueblePorId.returns(Promise.resolve(null))
         const data = {
             "idInmueble": 1,
-            "valor": 250000,
+            "valor": "250000",
             "idPagador": 1
         }
         const mensaje = `No se encontró ningún inmueble con el id ${data.idInmueble}`;
@@ -115,7 +115,7 @@ describe('Pruebas al controlador de pagos', () => {
     it(`Debería fallar al registrar un pago con id de pagador diferente del propietario`, async () => {
         const data = {
             "idInmueble": 1,
-            "valor": 250000,
+            "valor": "250000",
             "idPagador": 1
         }
         const inmueble: InmuebleDto = {
@@ -144,10 +144,10 @@ describe('Pruebas al controlador de pagos', () => {
         expect(response.body.message).toBe(mensaje);
     })
 
-    const inmueble: InmuebleDto = {
+    const inmueble: any = {
         "id": 1,
         "direccion": "Calle 16 # 31 - 17",
-        "valor": 250000,
+        "valor": "250000",
         "fechaAsignacion": new Date(),
         "fechaInicioPago": new Date(),
         "fechaLimitePago": new Date(),
@@ -164,10 +164,10 @@ describe('Pruebas al controlador de pagos', () => {
         daoInmueble.obtenerInmueblePorId.returns(Promise.resolve(inmueble))
         daoPago.obtenerTotalAbonosAnteriores.returns(Promise.resolve(0))
 
-        const data: ComandoRegistrarPago = {
+        const data: any = {
             "idInmueble": 1,
             "idPagador": 1,
-            "valor": 10000000
+            "valor": "10000000"
         }
         const mensaje = `El valor ingresado para pagar supera el valor del inmueble`;
 
@@ -185,10 +185,10 @@ describe('Pruebas al controlador de pagos', () => {
         daoInmueble.obtenerInmueblePorId.returns(Promise.resolve(inmueble))
         daoPago.obtenerTotalAbonosAnteriores.returns(Promise.resolve(TOTAL_ABONADO))
 
-        const data: ComandoRegistrarPago = {
+        const data: any = {
             "idInmueble": 1,
             "idPagador": 1,
-            "valor": 10000000
+            "valor": "10000000"
         }
         const mensaje = `La suma de los abonos mas el pago actual supera el valor del inmueble. Total abonado hasta ahora: $${TOTAL_ABONADO}`;
 
@@ -205,10 +205,10 @@ describe('Pruebas al controlador de pagos', () => {
         daoInmueble.obtenerInmueblePorId.returns(Promise.resolve(inmueble))
         daoPago.obtenerTotalAbonosAnteriores.returns(Promise.resolve(0))
 
-        const data: ComandoRegistrarPago = {
+        const data: any = {
             "idInmueble": 1,
             "idPagador": 1,
-            "valor": 250000
+            "valor": "250000"
         }
         const fechaInicioPagoFormateada = moment(inmueble.fechaInicioPago).format("YYYY-MM-DD")
         const fechaLimitePagoFormateada = moment(inmueble.fechaLimitePago).format("YYYY-MM-DD")
@@ -227,14 +227,14 @@ describe('Pruebas al controlador de pagos', () => {
         daoInmueble.obtenerInmueblePorId.returns(Promise.resolve(inmueble))
         daoPago.obtenerTotalAbonosAnteriores.returns(Promise.resolve(0))
 
-        const data: ComandoRegistrarPago = {
+        const data: any = {
             "idInmueble": 1,
             "idPagador": 1,
-            "valor": 100000
+            "valor": "100000"
         }
         const fechaInicioPagoFormateada = moment(inmueble.fechaInicioPago).format("YYYY-MM-DD")
         const fechaLimitePagoFormateada = moment(inmueble.fechaLimitePago).format("YYYY-MM-DD")
-        const mensaje = `El abono del inmueble ubicado en la dirección ${inmueble.direccion}, por el periodo de ${fechaInicioPagoFormateada} hasta ${fechaLimitePagoFormateada} ha sido recibido. Recuerde que aún queda un saldo bruto de $${inmueble.valor - data.valor}. Muchas gracias por su transacción.`;
+        const mensaje = `El abono del inmueble ubicado en la dirección ${inmueble.direccion}, por el periodo de ${fechaInicioPagoFormateada} hasta ${fechaLimitePagoFormateada} ha sido recibido. Recuerde que aún queda un saldo bruto de $${inmueble.valor - Number(data.valor)}. Muchas gracias por su transacción.`;
 
         const response = await request(app.getHttpServer())
             .post('/pagos')
@@ -250,14 +250,14 @@ describe('Pruebas al controlador de pagos', () => {
         daoInmueble.obtenerInmueblePorId.returns(Promise.resolve(inmueble))
         daoPago.obtenerTotalAbonosAnteriores.returns(Promise.resolve(TOTAL_ABONADO))
 
-        const data: ComandoRegistrarPago = {
+        const data: any = {
             "idInmueble": 1,
             "idPagador": 1,
-            "valor": 100000
+            "valor": "100000"
         }
         const fechaInicioPagoFormateada = moment(inmueble.fechaInicioPago).format("YYYY-MM-DD")
         const fechaLimitePagoFormateada = moment(inmueble.fechaLimitePago).format("YYYY-MM-DD")
-        const mensaje = `El abono del inmueble ubicado en la dirección ${inmueble.direccion}, por el periodo de ${fechaInicioPagoFormateada} hasta ${fechaLimitePagoFormateada} ha sido recibido. Recuerde que aún queda un saldo bruto de $${inmueble.valor - (data.valor + TOTAL_ABONADO)}. Muchas gracias por su transacción.`;
+        const mensaje = `El abono del inmueble ubicado en la dirección ${inmueble.direccion}, por el periodo de ${fechaInicioPagoFormateada} hasta ${fechaLimitePagoFormateada} ha sido recibido. Recuerde que aún queda un saldo bruto de $${inmueble.valor - (Number(data.valor) + TOTAL_ABONADO)}. Muchas gracias por su transacción.`;
 
         const response = await request(app.getHttpServer())
             .post('/pagos')
@@ -273,10 +273,10 @@ describe('Pruebas al controlador de pagos', () => {
         daoInmueble.obtenerInmueblePorId.returns(Promise.resolve(inmueble))
         daoPago.obtenerTotalAbonosAnteriores.returns(Promise.resolve(TOTAL_ABONADO))
 
-        const data: ComandoRegistrarPago = {
+        const data: any = {
             "idInmueble": 1,
             "idPagador": 1,
-            "valor": 150000
+            "valor": "150000"
         }
         const fechaInicioPagoFormateada = moment(inmueble.fechaInicioPago).format("YYYY-MM-DD")
         const fechaLimitePagoFormateada = moment(inmueble.fechaLimitePago).format("YYYY-MM-DD")

@@ -5,6 +5,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -46,8 +47,8 @@ export class InmuebleControlador {
 
 
   @Get()
-  async listar(): Promise<InmuebleDto[]> {
-    return this._manejadorListarInmueble.ejecutarListar();
+  async listar(@Query() { limit = 0, offset = 0 }: { limit: number, offset: number }): Promise<{ inmuebles: InmuebleDto[], total: number }> {
+    return this._manejadorListarInmueble.ejecutarListar(limit, offset);
   }
 
   @Get('/:id')
