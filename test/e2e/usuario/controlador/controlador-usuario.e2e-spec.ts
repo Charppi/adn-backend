@@ -16,6 +16,7 @@ import { createStubObj } from '../../../util/create-object.stub';
 import { ServicioEditarUsuario } from 'src/dominio/usuario/servicio/serrvicio-editar-usuario';
 import { servicioEditarUsuarioProveedor } from 'src/infraestructura/usuario/proveedor/servicio/servicio-editar-usuario.proveedor';
 import { ManejadorEditarUsuario } from 'src/aplicacion/usuario/comando/editar-usuario.manejador';
+import { ComandoEditarUsuario } from 'src/aplicacion/usuario/comando/editar-usuario.comando';
 
 /**
  * Un sandbox es util cuando el módulo de nest se configura una sola vez durante el ciclo completo de pruebas
@@ -138,6 +139,22 @@ describe('Pruebas al controlador de usuarios', () => {
       .post('/usuarios')
       .send(usuario)
       .expect(HttpStatus.CREATED);
+  });
+
+  it('Debería editar el usuario', async () => {
+    const usuario: ComandoEditarUsuario = {
+      "nombre": "Carlos",
+      "apellido": "Mendez",
+      "cedula": 1006453353,
+      id: 1
+    };
+    daoUsuario.existeCedulaUsuarioDiferente.returns(Promise.resolve(null));
+
+    await request(app.getHttpServer())
+      .put('/usuarios')
+      .send(usuario)
+      .expect(HttpStatus.OK);
+
   });
 
 });

@@ -4,7 +4,6 @@ import { RepositorioUsuario } from 'src/dominio/usuario/puerto/repositorio/repos
 import { SinonStubbedInstance } from 'sinon';
 import { createStubObj } from '../../../util/create-object.stub';
 import { DaoUsuario } from 'src/dominio/usuario/puerto/dao/dao-usuario';
-import { ErrorValorMinimo } from 'src/dominio/errores/error-valor-minimo';
 import { ErrorDeNegocio } from 'src/dominio/errores/error-de-negocio';
 
 describe('Pruebas al servicio RegistrarUsuario', () => {
