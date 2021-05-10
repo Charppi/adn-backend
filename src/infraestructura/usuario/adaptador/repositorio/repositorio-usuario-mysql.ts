@@ -22,7 +22,7 @@ export class RepositorioUsuarioMysql implements RepositorioUsuario {
   async guardar(usuario: Usuario) {
     const entidad = new UsuarioEntidad();
     if (usuario.id) {
-      entidad.id = usuario.id
+      entidad.id = usuario.id;
     }
     entidad.cedula = usuario.cedula;
     entidad.nombre = usuario.nombre;
