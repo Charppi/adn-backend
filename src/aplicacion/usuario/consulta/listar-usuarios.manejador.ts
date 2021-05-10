@@ -14,7 +14,7 @@ export class ManejadorListarUsuario {
   }
 
   todos() {
-    return this._daoUsuario.listarTodos()
+    return this._daoUsuario.listarTodos();
   }
 
 }

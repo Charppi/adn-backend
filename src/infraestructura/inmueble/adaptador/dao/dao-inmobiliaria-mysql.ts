@@ -22,11 +22,11 @@ export class DaoInmobiliariaMysql implements DaoInmueble {
   }
 
   async obtenerInmueblePorId(id: number): Promise<InmuebleDto> {
-    return await this.entityManager.getRepository(InmuebleEntidad).findOne(id, { relations: ["usuario"] });
+    return await this.entityManager.getRepository(InmuebleEntidad).findOne(id, { relations: ['usuario'] });
   }
 
   async listar(limit: number, offset: number): Promise<InmuebleDto[]> {
-    const queryLimit = (limit > 0 && offset > 0) ? ` LIMIT ${limit} OFFSET ${offset};` : ";";
+    const queryLimit = (limit > 0 && offset > 0) ? ` LIMIT ${limit} OFFSET ${offset};` : ';';
 
     return this.entityManager.query(
       `SELECT * FROM inmueble${queryLimit}`,

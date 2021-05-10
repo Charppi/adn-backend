@@ -12,7 +12,7 @@ async function bootstrap() {
   const logger = await app.resolve(AppLogger);
   const configService = app.get(ConfigService);
 
-  app.enableCors()
+  app.enableCors();
 
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalFilters(new FiltroExcepcionesDeNegocio(logger));

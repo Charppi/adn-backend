@@ -7,6 +7,6 @@ export abstract class RepositorioInmueble {
     usuario: number | null,
     fechaAsignacion: Date | null,
     fechaInicioPago: Date | null,
-    fechaLimitePago: Date | null): Promise<void>
+    fechaLimitePago: Date | null): Promise<void>;
   abstract actualizarFechasDePago(id: number, fechaInicioPago: Date, fechaLimitePago: Date): Promise<void>;
 }

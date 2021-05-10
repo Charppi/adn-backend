@@ -5,6 +5,6 @@ export abstract class DaoInmueble {
   abstract obtenerInmueblePorId(id: number): Promise<InmuebleDto>;
   abstract existeDireccionInmueble(direccion: string): Promise<boolean>;
   abstract existeInmueble(id: number): Promise<boolean>;
-  abstract totalInmuebles(): Promise<number>
+  abstract totalInmuebles(): Promise<number>;
 
 }

@@ -14,7 +14,9 @@ export class Inmueble {
         this.#valor = valor;
         if (fechaAsignacion) this.#fechaAsignacion = fechaAsignacion;
         if (usuarioId) this.#usuarioId = usuarioId;
-        if (id) { this.#id = id; }
+        if (id) {
+            this.#id = id;
+        }
     }
 
     private validarValor(valor: number) {

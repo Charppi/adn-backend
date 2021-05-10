@@ -29,7 +29,7 @@ export class ServicioAsignarInmueble {
         if (id !== 0) {
             const existeUsuario = await this._daoUsuario.obtenerUsuarioId(id);
             if (!existeUsuario) {
-                throw new ErrorDeNegocio(`No se encontró un usuario con el id ${id}`)
+                throw new ErrorDeNegocio(`No se encontró un usuario con el id ${id}`);
             }
         }
 
@@ -38,7 +38,7 @@ export class ServicioAsignarInmueble {
         usuarioId = usuarioId === 0 ? null : usuarioId;
         const fechaAsignacion = usuarioId ? new Date() : null;
         const fechaInicioPago = usuarioId ? fechaAsignacion : null;
-        const fechaLimitePago = usuarioId ? moment(fechaInicioPago).add(1, "month").toDate() : null;
+        const fechaLimitePago = usuarioId ? moment(fechaInicioPago).add(1, 'month').toDate() : null;
         await this._repositorioInmueble.asignarInmueble(inmuebleId,
             usuarioId,
             fechaAsignacion,

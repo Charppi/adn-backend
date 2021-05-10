@@ -31,8 +31,9 @@ export class DaoUsuarioMysql implements DaoUsuario {
   }
 
   listar(limit = 0, offset = 0): Promise<UsuarioDto[]> {
+    const useLimit = ` LIMIT ${limit} OFFSET ${offset};`;
     return this.entityManager.query(
-      `SELECT * FROM USUARIO${(limit > 0 && offset > 0) ? ` LIMIT ${limit} OFFSET ${offset};` : `;`}`,
+      `SELECT * FROM USUARIO${(limit > 0 && offset > 0) ? useLimit : ';'}`,
     );
   }
 }

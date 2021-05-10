@@ -15,13 +15,15 @@ export class RepositorioUsuarioMysql implements RepositorioUsuario {
     return (await this.repositorio.count({ cedula })) > 0;
   }
 
-  async obtenerUsuarioId(id: number): Promise<UsuarioEntidad> {
-    return await this.repositorio.findOne(id);
+  obtenerUsuarioId(id: number): Promise<UsuarioEntidad> {
+    return this.repositorio.findOne(id);
   }
 
   async guardar(usuario: Usuario) {
     const entidad = new UsuarioEntidad();
-    if (usuario.id) { entidad.id = usuario.id };
+    if (usuario.id) {
+      entidad.id = usuario.id
+    }
     entidad.cedula = usuario.cedula;
     entidad.nombre = usuario.nombre;
     entidad.apellido = usuario.apellido;

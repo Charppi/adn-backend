@@ -40,7 +40,7 @@ export class UsuarioControlador {
     return this._manejadorListarUsuario.paginacion(query.limit, query.offset);
   }
 
-  @Get("/todos")
+  @Get('/todos')
   async listarTodos() {
     return this._manejadorListarUsuario.todos();
   }

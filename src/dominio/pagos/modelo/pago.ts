@@ -39,7 +39,9 @@ export class Pago {
         this.fechaLimite = fechaLimite;
         this.valorInmueble = valorInmueble;
         this.#fechaPago = new Date();
-        if (id) { this.#id = id; }
+        if (id) {
+            this.#id = id;
+        }
 
         this.validacionesYGeneracionDePago();
 
@@ -55,7 +57,7 @@ export class Pago {
     public setDiasPagoVencidos() {
         const ahora = moment();
         const limite = moment(this.fechaLimite);
-        const diasVencidos = ahora.diff(limite, "days");
+        const diasVencidos = ahora.diff(limite, 'days');
         this.diasVencidos = diasVencidos > 0 ? diasVencidos : 0;
     }
 
@@ -75,10 +77,24 @@ export class Pago {
     public getMensajeDePagoExitoso(valorInmueble: number, direccion: string, fechaInicioPago: Date, fechaLimitePago: Date) {
         const fechaInicioPagoFormateada = moment(fechaInicioPago).format("YYYY-MM-DD");
         const fechaLimitePagoFormateada = moment(fechaLimitePago).format("YYYY-MM-DD");
+        return this.construirMensaje(valorInmueble, direccion, fechaInicioPagoFormateada, fechaLimitePagoFormateada)
+    }
 
-        return this.abonosAnterioresMasActual == valorInmueble
-            ? `El pago del inmueble ubicado en la dirección ${direccion}, por el periodo de ${fechaInicioPagoFormateada} hasta ${fechaLimitePagoFormateada} ha sido completado. Se han actualizado las fechas de pago para el siguiente corte. Muchas gracias por su transacción.`
-            : `El abono del inmueble ubicado en la dirección ${direccion}, por el periodo de ${fechaInicioPagoFormateada} hasta ${fechaLimitePagoFormateada} ha sido recibido. Recuerde que aún queda un saldo bruto de $${valorInmueble - this.abonosAnterioresMasActual}. Muchas gracias por su transacción.`;
+    private construirMensaje(valorInmueble: number, direccion: string, fechaInicioPagoFormateada: string, fechaLimitePagoFormateada: string) {
+        let primeraParte: string
+        let segundaParte: string
+        let terceraParte: string
+
+        if (Number(this.abonosAnterioresMasActual) === Number(valorInmueble)) {
+            primeraParte = `El pago del inmueble ubicado en la dirección ${direccion},`
+            segundaParte = `por el periodo de ${fechaInicioPagoFormateada} hasta ${fechaLimitePagoFormateada} ha sido completado.`
+            terceraParte = `Se han actualizado las fechas de pago para el siguiente corte. Muchas gracias por su transacción.`
+        } else {
+            primeraParte = `El abono del inmueble ubicado en la dirección ${direccion},`
+            segundaParte = `por el periodo de ${fechaInicioPagoFormateada} hasta ${fechaLimitePagoFormateada} ha sido recibido.`
+            terceraParte = `Recuerde que aún queda un saldo bruto de $${valorInmueble - this.abonosAnterioresMasActual}. Muchas gracias por su transacción.`
+        }
+        return `${primeraParte} ${segundaParte} ${terceraParte}`
     }
 
     pagoCompletado(valorInmueble: number): boolean {
